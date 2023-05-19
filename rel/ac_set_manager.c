@@ -224,6 +224,8 @@ static void aSetMgr_move(ACTOR* actor, GAME* game) {
   SET_MANAGER* set_manager = (SET_MANAGER*)actor;
   GAME_PLAY* play = (GAME_PLAY*)game;
 
+  aSOG_gyoei_debug(set_manager, play);
+
   if ((*move[set_manager->move_proc])(play, set_manager) == TRUE) {
     set_manager->move_proc = set_manager->next_move_proc;
   }
