@@ -113,6 +113,7 @@ enum range_proc {
 };
 
 extern int aSOG_gyoei_set(SET_MANAGER* set_manager, GAME_PLAY* play);
+extern void aSOG_gyoei_debug(SET_MANAGER* set_manager, GAME_PLAY* play);
 
 #ifdef __cplusplus
 }
