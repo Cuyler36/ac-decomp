@@ -13,6 +13,7 @@
 #include "m_kankyo.h"
 #include "m_time.h"
 #include "gfxalloc.h"
+#include "m_controller.h"
 
 /* sizeof(aSOG_term_info_c) == 4 */
 typedef struct term_info_s {
@@ -2183,6 +2184,15 @@ extern int aSOG_gyoei_set(SET_MANAGER* set_manager, GAME_PLAY* play) {
   return res;
 }
 
+typedef struct {
+  u8 disp_enable:1;
+  u8 weight_enable:1;
+  u8 page:3;
+  u8 max_page:3;
+} aSOG_debug_state_c;
+
+#define aSOG_DEBUG_PAGE_SIZE 10
+
 extern void aSOG_gyoei_debug(SET_MANAGER* set_manager, GAME_PLAY* play) {
   static const rgba_t print_color[2] = {
     { 0, 255, 0, 255 }, // green
@@ -2248,6 +2258,8 @@ extern void aSOG_gyoei_debug(SET_MANAGER* set_manager, GAME_PLAY* play) {
     "pond"
   };
 
+  static aSOG_debug_state_c fish_debug_state = { TRUE, FALSE, 0, 1 };
+
   GRAPH* graph = play->game.graph;
   Gfx* poly_opa_gfx;
   Gfx* opened_gfx;
@@ -2260,11 +2272,57 @@ extern void aSOG_gyoei_debug(SET_MANAGER* set_manager, GAME_PLAY* play) {
   f32 weight_by_fish[aSOG_FISH_TYPE_EXTENDED_NUM][aSOG_SPAWN_AREA_NUM];
   int displayed[aSOG_FISH_TYPE_EXTENDED_NUM][aSOG_SPAWN_AREA_NUM];
   int used = 0;
+  int unique = 0;
+  int page_start_num;
+  int page_end_num;
+
+  // process input
+  if (chkButton(BUTTON_Z)) {
+    if (chkTrigger(BUTTON_A)) {
+      fish_debug_state.disp_enable ^= TRUE;
+    }
+
+    if (chkTrigger(BUTTON_B)) {
+      fish_debug_state.weight_enable ^= TRUE;
+    }
+
+    if (chkTrigger(BUTTON_L)) {
+      int p_page = (int)fish_debug_state.page - 1;
+      fish_debug_state.page = p_page < 0 ? fish_debug_state.max_page - 1 : p_page;
+    }
+
+    if (chkTrigger(BUTTON_R)) {
+      int n_page = (int)fish_debug_state.page + 1;
+      fish_debug_state.page = n_page >= fish_debug_state.max_page ? 0 : n_page;
+    }
+  }
+
+  if (!fish_debug_state.disp_enable) {
+    return;
+  }
 
   bzero(weight_by_fish, aSOG_FISH_TYPE_EXTENDED_NUM * aSOG_SPAWN_AREA_NUM * sizeof(f32));
   bzero(displayed, aSOG_FISH_TYPE_EXTENDED_NUM * aSOG_SPAWN_AREA_NUM * sizeof(int));
   aSOG_gyoei_chk_term_info(&term0, &term1, &term0_rate);
 
+  // iterate through all spawns and add up total weight
+  for (i = 0; i < set_manager->keep.gyoei_keep.possible_gyoei_num; i++) {
+    aSOG_gyoei_spawn_info_weight_f_c* info = set_manager->keep.gyoei_keep.spawn_weights + i;
+    total_weight += info->spawn_weight;
+
+    if (weight_by_fish[info->type][info->spawn_area] == 0) {
+      unique++; // this is bad because it's possible for the weight of an entry to be 0 so it gets included multiple times
+    }
+
+    weight_by_fish[info->type][info->spawn_area] += info->spawn_weight;
+  }
+
+  fish_debug_state.max_page = 1 + unique / aSOG_DEBUG_PAGE_SIZE;
+  if (fish_debug_state.page >= fish_debug_state.max_page) {
+    fish_debug_state.page = 0;
+  }
+
+  // draw
   OPEN_DISP(graph);
 
   poly_opa_gfx = NOW_POLY_OPA_DISP;
@@ -2277,27 +2335,30 @@ extern void aSOG_gyoei_debug(SET_MANAGER* set_manager, GAME_PLAY* play) {
   
   gfxprint_locate8x8(gfxprint_p, 3, 3);
   gfxprint_color(gfxprint_p, 255, 0, 0, 255); // red
-  gfxprint_printf(gfxprint_p, "C.TERM: %d N.TERM: %d", term0, term1);
+  gfxprint_printf(gfxprint_p, "C.TERM:%d N.TERM:%d PAGE:%d/%d", term0, term1, fish_debug_state.page + 1, fish_debug_state.max_page);
   gfxprint_locate8x8(gfxprint_p, 3, 4);
   gfxprint_printf(gfxprint_p, "C.RATE: %.02f FISH: %s               ", term0_rate, last_fish == aSOG_FISH_TYPE_INVALID ? "NONE" : fish_names[last_fish]);
 
-  // iterate through all spawns and add up total weight
-  for (i = 0; i < set_manager->keep.gyoei_keep.possible_gyoei_num; i++) {
-    aSOG_gyoei_spawn_info_weight_f_c* info = set_manager->keep.gyoei_keep.spawn_weights + i;
-    total_weight += info->spawn_weight;
-    weight_by_fish[info->type][info->spawn_area] += info->spawn_weight;
-  }
-
   // display spawn info
-  for (i = 0; i < set_manager->keep.gyoei_keep.possible_gyoei_num; i++) {
+  page_start_num = fish_debug_state.page * aSOG_DEBUG_PAGE_SIZE;
+  page_end_num = page_start_num + aSOG_DEBUG_PAGE_SIZE;
+  for (i = 0; i < set_manager->keep.gyoei_keep.possible_gyoei_num && used < page_end_num; i++) {
     aSOG_gyoei_spawn_info_weight_f_c* info = set_manager->keep.gyoei_keep.spawn_weights + i;
 
     if (!displayed[info->type][info->spawn_area]) {
-      f32 weight = weight_by_fish[info->type][info->spawn_area];
-      displayed[info->type][info->spawn_area] = TRUE;
-      gfxprint_locate8x8(gfxprint_p, 3, 5 + used);
-      gfxprint_color(gfxprint_p, print_color[used & 1].r, print_color[used & 1].g, print_color[used & 1].b, print_color[used & 1].a);
-      gfxprint_printf(gfxprint_p, "%s - %s - %.02f - %.02f%%", fish_names[info->type], area_names[info->spawn_area], weight, (weight / total_weight) * 100.0f);
+      if (used >= page_start_num) {
+        f32 weight = weight_by_fish[info->type][info->spawn_area];
+        displayed[info->type][info->spawn_area] = TRUE;
+        gfxprint_locate8x8(gfxprint_p, 3, 5 + (used - page_start_num));
+        gfxprint_color(gfxprint_p, print_color[used & 1].r, print_color[used & 1].g, print_color[used & 1].b, print_color[used & 1].a);
+
+        if (fish_debug_state.weight_enable) {
+          gfxprint_printf(gfxprint_p, "%s - %s - %.02f - %.02f%%", fish_names[info->type], area_names[info->spawn_area], weight, (weight / total_weight) * 100.0f);
+        }
+        else {
+          gfxprint_printf(gfxprint_p, "%s - %s - %.02f%%", fish_names[info->type], area_names[info->spawn_area], (weight / total_weight) * 100.0f);
+        }
+      }
       used++;
     }
   }
