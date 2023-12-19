@@ -247,6 +247,9 @@ static int mSM_check_open_map_new(GAME_PLAY* play) {
   return mFI_CheckBlockKind_OR(bx, bz, mRF_BLOCKKIND_OCEAN) == FALSE;
 }
 
+static int mSM_last_tool_slot = 0;
+static OSTime mSM_last_tool_change_time = 0;
+
 extern void mSM_submenu_ctrl(GAME_PLAY* play) {
   Submenu* submenu = &play->submenu;
   int open_inventory;
@@ -311,6 +314,127 @@ extern void mSM_submenu_ctrl(GAME_PLAY* play) {
             mSM_open_submenu(submenu, mSM_OVL_MAP, 0, 0);
             mSM_Reset_player_btn_type1(play);
             break;
+        }
+      }
+    }
+    else if (
+      player != NULL &&
+      Common_Get(reset_flag) == FALSE &&
+      submenu->disable_start_btn_flag == FALSE &&
+      submenu->disable_start_btn_timer == 0 &&
+      mPlib_able_submenu_type1((GAME*)play)
+    ) {
+      OSTime now = OSGetTime();
+
+      if (OSTicksToMilliseconds(now - mSM_last_tool_change_time) >= mSM_TOOL_CHANGE_DELAY) {
+        mActor_name_t equipment = Common_Get(now_private)->equipment;
+
+        switch (getTrigger() & mSM_TOOL_ALL_BUTTONS) {
+          case mSM_TOOL_UNEQUIP_BUTTON:
+          {
+
+            if (equipment != EMPTY_NO) {
+              int free_idx = mPr_GetPossessionItemIdxWithCond(Common_Get(now_private), EMPTY_NO, mPr_ITEM_COND_NORMAL);
+
+              if (free_idx != -1) {
+                Common_Get(now_private)->equipment = EMPTY_NO;
+                mPr_SetPossessionItem(Common_Get(now_private), free_idx, equipment, mPr_ITEM_COND_NORMAL);
+                mSM_last_tool_slot = free_idx;
+                mSM_last_tool_change_time = now; // update last equip change time
+                sAdo_SysTrgStart(0x60);
+              }
+            }
+
+            break;
+          }
+
+          case mSM_TOOL_PREV_BUTTON:
+          {
+            mActor_name_t tool = EMPTY_NO;
+            mActor_name_t item = Common_Get(now_private)->inventory.pockets[mSM_last_tool_slot];
+            int i;
+            int slot = mSM_last_tool_slot;
+
+            if (
+              equipment == EMPTY_NO &&
+              ITEM_NAME_GET_TYPE(item) == NAME_TYPE_ITEM1 &&
+              ITEM_NAME_GET_CAT(item) == ITEM1_CAT_TOOL
+            ) {
+              /* Re-equip the last tool */
+              tool = item;
+            }
+            else {
+              /* Search all slots for the next tool */
+              slot = mSM_last_tool_slot - 1;
+
+              for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+                if (slot < 0) {
+                  slot = mPr_POCKETS_SLOT_COUNT - 1;
+                }
+
+                item = Common_Get(now_private)->inventory.pockets[slot];
+
+                if (
+                  ITEM_NAME_GET_TYPE(item) == NAME_TYPE_ITEM1 &&
+                  ITEM_NAME_GET_CAT(item) == ITEM1_CAT_TOOL &&
+                  mPr_GET_ITEM_COND(Common_Get(now_private)->inventory.item_conditions, slot) == mPr_ITEM_COND_NORMAL
+                ) {
+                  tool = item;
+                  break;
+                }
+
+                slot--;
+              }
+            }
+
+            if (tool != EMPTY_NO) {
+              Common_Get(now_private)->equipment = tool;
+              mPr_SetPossessionItem(Common_Get(now_private), slot, equipment, mPr_ITEM_COND_NORMAL);
+              mSM_last_tool_slot = slot;
+              mSM_last_tool_change_time = now; // update last equip change time
+              sAdo_SysTrgStart(0x41C);
+            }
+
+            break;
+          }
+
+          case mSM_TOOL_NEXT_BUTTON:
+          {
+            mActor_name_t tool = EMPTY_NO;
+            mActor_name_t item = Common_Get(now_private)->inventory.pockets[mSM_last_tool_slot];
+            int i;
+            int slot = mSM_last_tool_slot + 1;
+
+            /* Search all slots for the next tool */
+            for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+              if (slot >= mPr_POCKETS_SLOT_COUNT) {
+                slot = 0;
+              }
+
+              item = Common_Get(now_private)->inventory.pockets[slot];
+
+              if (
+                ITEM_NAME_GET_TYPE(item) == NAME_TYPE_ITEM1 &&
+                ITEM_NAME_GET_CAT(item) == ITEM1_CAT_TOOL &&
+                mPr_GET_ITEM_COND(Common_Get(now_private)->inventory.item_conditions, slot) == mPr_ITEM_COND_NORMAL
+              ) {
+                tool = item;
+                break;
+              }
+
+              slot++;
+            }
+
+            if (tool != EMPTY_NO) {
+              Common_Get(now_private)->equipment = tool;
+              mPr_SetPossessionItem(Common_Get(now_private), slot, equipment, mPr_ITEM_COND_NORMAL);
+              mSM_last_tool_slot = slot;
+              mSM_last_tool_change_time = now; // update last equip change time
+              sAdo_SysTrgStart(0x41C);
+            }
+
+            break;
+          }
         }
       }
     }

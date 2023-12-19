@@ -18,6 +18,13 @@ typedef struct submenu_s Submenu;
 #define mSM_INV_BUTTON_0 BUTTON_START
 #define mSM_INV_BUTTON_1 BUTTON_Y
 
+/* @mod */
+#define mSM_TOOL_UNEQUIP_BUTTON BUTTON_DDOWN // unequip tool
+#define mSM_TOOL_PREV_BUTTON BUTTON_DLEFT // go back one tool
+#define mSM_TOOL_NEXT_BUTTON BUTTON_DRIGHT // go forward one tool
+#define mSM_TOOL_ALL_BUTTONS (mSM_TOOL_UNEQUIP_BUTTON | mSM_TOOL_PREV_BUTTON | mSM_TOOL_NEXT_BUTTON)
+#define mSM_TOOL_CHANGE_DELAY 500 // milliseconds between tool D-Pad tool changes
+
 enum {
   mSM_PROCESS_WAIT,
   mSM_PROCESS_PREWAIT,
