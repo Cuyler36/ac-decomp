@@ -7,21 +7,40 @@ static void aEGPS_set_string(int type) {
   mMsg_Set_item_str(mMsg_Get_base_window_p(), type, str, sizeof(str));
 }
 
+static void aEGPS_read_huusui_point() {
+  u8 num_str[5];
+
+  mFont_UnintToString(num_str, 5, mPr_GetMoneyPower(), 5, TRUE, FALSE, TRUE);
+  mMsg_Set_free_str(mMsg_Get_base_window_p(), mMsg_FREE_STR5, num_str, sizeof(num_str));
+
+  mFont_UnintToString(num_str, 5, mPr_GetMoneyPower(), 5, TRUE, FALSE, TRUE);
+  mMsg_Set_free_str(mMsg_Get_base_window_p(), mMsg_FREE_STR6, num_str, sizeof(num_str));
+}
+
 static void aEGPS_call_in(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play) {
   static int msg_no[] = {
     0x971,  /* 'No' choice */
     0x973,  /* 'Yes' choice */
-    0x972   /* 'Yes' choice, but not enough Bells */
+    0x972,  /* 'Yes' choice, but not enough Bells */
+    0x983,  /* Color option */
+    0x984,  /* Color option but with no Feng Shui items */
+    0x973,
+    0x972
   };
 
   static int next_act_idx[] = {
     aEGPS_ACTION_TALK_END_WAIT,
     aEGPS_ACTION_DECIDE_RESULT,
+    aEGPS_ACTION_TALK_END_WAIT,
+    aEGPS_ACTION_TALK_END_WAIT,
+    aEGPS_ACTION_TALK_END_WAIT,
+    aEGPS_ACTION_DECIDE_RESULT3,
     aEGPS_ACTION_TALK_END_WAIT
   };
 
   mMsg_Window_c* msg_p = mMsg_Get_base_window_p();
 
+  /* Wait for the text box to "continue" */
   if (mMsg_Check_MainNormalContinue(msg_p) == TRUE) {
     int type = -1;
 
@@ -34,7 +53,72 @@ static void aEGPS_call_in(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play) {
           type = 2; // not enough bells
         }
         break;
-      case mChoice_CHOICE1: /* No */
+      case mChoice_CHOICE1: /* Item color */
+      {
+        static int color_idx[] = {
+          -1,
+          0x436, // yellow
+          0x434, // red
+          0x435, // orange
+          0x438, // green
+          0x37D  // lucky
+        };
+
+        u8 str[mIN_ITEM_NAME_LEN];
+        int ftr_with_color = 0;
+        int selected;
+        int i;
+
+        mem_clear(str, sizeof(str), CHAR_SPACE);
+        for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+          /* Convert item to furniture variant for detecting things like the frog */
+          mActor_name_t item = mRmTp_Item1ItemNo2FtrItemNo_AtPlayerRoom(Common_Get(now_private)->inventory.pockets[i], TRUE);
+          int color = mHsRm_GetFtrColor(item);
+
+          if (color != -1 && color != mHsRm_HUUSUI_NONE) {
+            ftr_with_color++;
+          }
+        }
+
+        if (ftr_with_color > 0) {
+          selected = RANDOM(ftr_with_color);
+
+          for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+            mActor_name_t item = mRmTp_Item1ItemNo2FtrItemNo_AtPlayerRoom(Common_Get(now_private)->inventory.pockets[i], TRUE);
+            int color = mHsRm_GetFtrColor(item);
+
+            if (color != -1 && color != mHsRm_HUUSUI_NONE) {
+              if (selected <= 0) {
+                mIN_copy_name_str(str, item);
+                mMsg_Set_item_str_art(msg_p, mMsg_ITEM_STR0, str, sizeof(str), mIN_get_item_article(item));
+
+                mString_Load_StringFromRom(str, sizeof(str), color_idx[color]);
+                mMsg_Set_free_str(msg_p, mMsg_FREE_STR5, str, sizeof(str));
+                break;
+              }
+              else {
+                selected--;
+              }
+            }
+          }
+
+          type = 3; // color
+        }
+        else {
+          type = 4; // color, no valid items
+        }
+
+        break;
+      }
+      case mChoice_CHOICE2:
+        if (Common_Get(now_private)->inventory.wallet >= aEGPS_DIVINATION_PRICE) {
+          type = 5;
+        }
+        else {
+          type = 6;
+        }
+        break;
+      case mChoice_CHOICE3: /* No */
         type = 0; // no
         break;
     }
@@ -91,6 +175,11 @@ static void aEGPS_decide_result(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play) {
       Common_Get(now_private)->destiny.type = destiny[selected];
       mMsg_Set_continue_msg_num(msg_p, msg_no[selected]);
     }
+    else if (gypsy->talk_action == aEGPS_ACTION_DECIDE_RESULT3) {
+      /* Divination */
+      aEGPS_read_huusui_point();
+      mMsg_Set_continue_msg_num(msg_p, 0x986);
+    }
     else {
       /* aEGPS_ACTION_DECIDE_RESULT2 */
       selected = Common_Get(now_private)->destiny.type - 1;
@@ -112,12 +201,21 @@ static void aEGPS_decide_result_init(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play) {
   gypsy->fortune_given = TRUE;
 }
 
+static void aEGPS_decide_result3_init(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play) {
+  Common_Get(now_private)->inventory.wallet -= aEGPS_DIVINATION_PRICE;
+  aEGPS_set_string(aEGPS_STR_TYPE_ADJECTIVE);
+  aEGPS_set_string(aEGPS_STR_TYPE_NOUN);
+  aEGPS_set_string(aEGPS_STR_TYPE_VERB);
+  aEGPS_set_string(aEGPS_STR_TYPE_PLACE);
+}
+
 static void aEGPS_init_proc(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play, int action) {
   static aEGPS_TALK_INIT_PROC init_proc[aEGPS_ACTION_NUM] = {
     (aEGPS_TALK_INIT_PROC)&none_proc1,
     (aEGPS_TALK_INIT_PROC)&none_proc1,
     &aEGPS_decide_result_init,
-    (aEGPS_TALK_INIT_PROC)&none_proc1
+    (aEGPS_TALK_INIT_PROC)&none_proc1,
+    &aEGPS_decide_result3_init
   };
 
   (*init_proc[action])(gypsy, play);
@@ -127,6 +225,7 @@ static void aEGPS_setupAction(EV_GYPSY_ACTOR* gypsy, GAME_PLAY* play, int action
   static aEGPS_TALK_PROC process[aEGPS_ACTION_NUM] = {
     (aEGPS_TALK_PROC)&none_proc1,
     &aEGPS_call_in,
+    &aEGPS_decide_result,
     &aEGPS_decide_result,
     &aEGPS_decide_result
   };

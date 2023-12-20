@@ -10,6 +10,7 @@ extern "C" {
 #endif
 
 #define aEGPS_FORTUNE_PRICE 50
+#define aEGPS_DIVINATION_PRICE 1000
 
 typedef struct ev_gypsy_actor_s EV_GYPSY_ACTOR;
 

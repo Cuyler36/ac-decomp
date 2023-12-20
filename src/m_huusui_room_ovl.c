@@ -307,3 +307,13 @@ extern void mHsRm_HuusuiRoomOvl(int player_no) {
   Common_Set(money_power, money_power);
   Common_Set(goods_power, goods_power);
 }
+
+extern int mHsRm_GetFtrColor(mActor_name_t item) {
+  if (ITEM_IS_FTR(item)) {
+    int ftr_idx = mRmTp_FtrItemNo2FtrIdx(item);
+
+    return mMkRm_ftr_info[ftr_idx].huusui_type;
+  }
+
+  return -1; // no color
+}

@@ -2,6 +2,8 @@
 
 #include "m_choice.h"
 #include "m_common_data.h"
+#include "m_font.h"
+#include "m_huusui_room_ovl.h"
 #include "m_item_name.h"
 #include "m_msg.h"
 #include "m_play.h"
@@ -12,6 +14,7 @@ enum {
   aEGPS_ACTION_CALL_IN,
   aEGPS_ACTION_DECIDE_RESULT,
   aEGPS_ACTION_DECIDE_RESULT2,
+  aEGPS_ACTION_DECIDE_RESULT3,
 
   aEGPS_ACTION_NUM
 };
