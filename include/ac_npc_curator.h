@@ -13,6 +13,9 @@ extern "C" {
 #define aCR_SLEEP_TIME_START  ( 6 * mTM_SECONDS_IN_HOUR)
 #define aCR_SLEEP_TIME_END    (18 * mTM_SECONDS_IN_HOUR)
 
+/* @mod */
+#define aCR_LEARN_IDENTIFY_FOSSIL_THRESHOLD 12 // Blathers will be able to identify fossils after this many has been donated to the museum
+
 typedef struct npc_curator_actor_s NPC_CURATOR_ACTOR;
 
 typedef void (*aCR_SETUPTALKACTION_PROC)(NPC_CURATOR_ACTOR*, GAME_PLAY*, int);
@@ -30,6 +33,7 @@ struct npc_curator_actor_s {
   aCR_SETUPTALKACTION_PROC setupTalkAction_proc;
   int msg_no;
   int _9B0; // might be unused 'awake' state
+  u8 notify_of_certification; // @mod
   mActor_name_t donated_item;
 };
 

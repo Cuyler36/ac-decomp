@@ -305,8 +305,8 @@ static void aCR_chk_fossil_parts_complete(NPC_CURATOR_ACTOR* curator, GAME_PLAY*
 }
 
 static void aCR_chk_fossil_complete(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play) {
-  static int msg_no[] = { 0x2F73, 0x2F85 };
-  static int next_act_idx[] = { aCR_TALK_CHK_CONTINUE_TO_DONATE3, aCR_TALK_CHK_ALL_COMPLETE };
+  static int msg_no[] = { 0x2F9B, 0x2F85 };
+  static int next_act_idx[] = { aCR_TALK_CHK_NOTIFY_CERTIFICATION, aCR_TALK_CHK_ALL_COMPLETE };
 
   mMsg_Window_c* msg_p = mMsg_Get_base_window_p();
   int complete = FALSE;
@@ -730,7 +730,8 @@ static void aCR_msg_win_open_wait(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play) {
     { 0x2F72, aCR_TALK_PUTAWAY_DEMO_START_WAIT },
     { 0x2F86, aCR_TALK_PUTAWAY_DEMO_START_WAIT5 },
     { 0x2F87, aCR_TALK_PUTAWAY_DEMO_START_WAIT4 },
-    { 0x2F89, aCR_TALK_PUTAWAY_DEMO_START_WAIT5_2 }
+    { 0x2F89, aCR_TALK_PUTAWAY_DEMO_START_WAIT5_2 },
+    { 0x2F9C, aCR_TALK_RETURN_DEMO_START_WAIT } // @mod - identify fossil
   };
 
   mMsg_Window_c* msg_p = mMsg_Get_base_window_p();
@@ -756,7 +757,23 @@ static void aCR_msg_win_open_wait(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play) {
         act_idx = aCR_get_idx_to_donate_fish(item);
       }
       else if (item == ITM_FOSSIL) {
-        act_idx = 3;
+        /* @mod */
+        if (mMmd_CountDisplayedFossil() >= aCR_LEARN_IDENTIFY_FOSSIL_THRESHOLD) {
+          int multi_fossil = FALSE;
+
+          if (RANDOM(2) == 0) {
+            multi_fossil = TRUE;
+          }
+          
+          /* @TODO: give the farawy museum's fossil select logic more chance of being new */
+          item = mSP_RandomOneFossilSelect(multi_fossil);
+          /* Replace the fossil with the identified version */
+          mPr_SetPossessionItem(Common_Get(now_private), play->submenu.item_p->slot_no, item, mPr_ITEM_COND_NORMAL);
+          act_idx = 28;
+        }
+        else {
+          act_idx = 3;
+        }
       }
       else {
         act_idx = 2;
@@ -906,9 +923,17 @@ static void aCR_putaway_demo_end_wait(NPC_CURATOR_ACTOR* curator, GAME_PLAY* pla
         break;
       case aCR_TALK_PUTAWAY_DEMO_END_WAIT2:
         aCR_chk_fossil_parts_complete(curator, play);
+
+        if (mMmd_CountDisplayedFossil() == aCR_LEARN_IDENTIFY_FOSSIL_THRESHOLD) {
+          curator->notify_of_certification = TRUE;
+        }
         break;
       case aCR_TALK_PUTAWAY_DEMO_END_WAIT3:
         aCR_chk_fossil_complete(curator, play);
+
+        if (mMmd_CountDisplayedFossil() == aCR_LEARN_IDENTIFY_FOSSIL_THRESHOLD) {
+          curator->notify_of_certification = TRUE;
+        }
         break;
       case aCR_TALK_PUTAWAY_DEMO_END_WAIT4:
         aCR_chk_insect_complete(curator, play);
@@ -953,6 +978,22 @@ static void aCR_chk_all_complete(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play) {
 
     mMsg_Set_continue_msg_num(msg_p, msg_no[msg_idx]);
     (*curator->setupTalkAction_proc)(curator, play, aCR_TALK_END_WAIT);
+  }
+}
+
+/* @mod */
+static void aCR_chk_notify_certification(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play) {
+  mMsg_Window_c* msg_p = mMsg_Get_base_window_p();
+
+  if (curator->msg_no == mMsg_Get_msg_num(msg_p) && mMsg_Check_MainNormalContinue(msg_p) == TRUE) {
+    int act = aCR_TALK_END_WAIT;
+    if (curator->notify_of_certification == FALSE) {
+      mMsg_Set_continue_msg_num(msg_p, 0x2F73);
+      act = aCR_TALK_CHK_CONTINUE_TO_DONATE3;
+    }
+
+    curator->notify_of_certification = FALSE;
+    (*curator->setupTalkAction_proc)(curator, play, act);
   }
 }
 
@@ -1027,6 +1068,7 @@ static void aCR_talk_init_proc(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play, int 
     &aCR_putaway_demo_end_wait_init,
     (aCR_TALK_INIT_PROC)none_proc1,
     (aCR_TALK_INIT_PROC)none_proc1,
+    (aCR_TALK_INIT_PROC)none_proc1,
     (aCR_TALK_INIT_PROC)none_proc1
   };
 
@@ -1068,7 +1110,8 @@ static void aCR_setupTalkAction(NPC_CURATOR_ACTOR* curator, GAME_PLAY* play, int
     &aCR_putaway_demo_end_wait,
     &aCR_after_explain_insect,
     &aCR_thanks_fossil_msg_end_wait,
-    &aCR_chk_all_complete
+    &aCR_chk_all_complete,
+    &aCR_chk_notify_certification
   };
 
   curator->talk_act_idx = talk_act;

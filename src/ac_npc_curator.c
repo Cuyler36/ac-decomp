@@ -47,6 +47,7 @@ enum {
   aCR_TALK_AFTER_EXPLAIN_INSECT,
   aCR_TALK_THANKS_FOSSIL_MSG_END_WAIT,
   aCR_TALK_CHK_ALL_COMPLETE,
+  aCR_TALK_CHK_NOTIFY_CERTIFICATION,
 
   aCR_TALK_NUM
 };
@@ -99,6 +100,7 @@ static void aCR_actor_ct(ACTOR* actorx, GAME* game) {
     actorx->status_data.weight = 255;
     actorx->world.position.x += 20.0f;
     curator->setupTalkAction_proc = &aCR_setupTalkAction;
+    curator->notify_of_certification = FALSE;
 
     /* Clear 'first talk' flag if entering from a scene outside the museum */
     if (Common_Get(last_scene_no) >= SCENE_MY_ROOM_LL1 || Common_Get(last_scene_no) < SCENE_MUSEUM_ROOM_PAINTING) {
