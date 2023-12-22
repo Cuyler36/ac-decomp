@@ -416,7 +416,7 @@ private:
   /* 0x0B9C */ u32 polygons_time;
   /* 0x0BA0 */ u32 dirty_check_time;
   /* 0x0BA4 */ u32 dirty_lightX_time;
-  /* 0x0BA8 */ u32 dirty_lightX_cnt
+  /* 0x0BA8 */ u32 dirty_lightX_cnt;
   /* 0x0BAC */ u32 dirty_light_time;
   /* 0x0BB0 */ u32 dirty_light_cnt;
   /* 0x0BB4 */ u32 dirty_tex_time;
