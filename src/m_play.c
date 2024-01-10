@@ -387,7 +387,7 @@ void play_cleanup(GAME* game){
     play->submenu.mode = 0;
     
     PreRender_cleanup(&play->prerender);
-    CollisionCheck_dt(play, &play->collision_check);
+    CollisionCheck_dt(&play->game, &play->collision_check);
     
     if(play->fb_mode == 3){
         fbdemo_cleanup(&fbdemo);
@@ -455,7 +455,7 @@ void play_init(GAME* game){
 
     initView(&play->view, graph);
     Init_Camera2(play);
-    CollisionCheck_ct(play, &play->collision_check);
+    CollisionCheck_ct(&play->game, &play->collision_check);
     
     mCoBG_InitMoveBgData();
     mCoBG_InitBlockBgCheckMode();
@@ -497,7 +497,7 @@ void play_init(GAME* game){
     fbdemo_fade_setcolor_rgba8888(fade, 0xA0A0A0FF);
     fbdemo_fade_startup(fade);
 
-    play->fade_color_value = 0;
+    play->fade_color_value.rgba8888 = 0;
     
     freebytes = game_getFreeBytes(&play->game);
     alloc = (u32)THA_alloc16(&play->game.tha, freebytes);
@@ -554,9 +554,9 @@ void Game_play_move_fbdemo_not_move(GAME_PLAY* play){
         play->game_frame++;
         mVibctl_clr_force_stop(2);
         play->game.doing_point = 7;
-        CollisionCheck_OC(play, &play->collision_check);
+        CollisionCheck_OC(&play->game, &play->collision_check);
         play->game.doing_point = 8;
-        CollisionCheck_clear(play, &play->collision_check);
+        CollisionCheck_clear(&play->game, &play->collision_check);
         play->game.doing_point = 9;
         play->game.doing_point = 0;
         play->game.doing_point_specific = 0x90;
@@ -731,7 +731,7 @@ int makeBumpTexture(GAME_PLAY* play, GRAPH* graph1, GRAPH* graph2){
         }
 
         fbdemo_fade_draw(&play->color_fade, &polydisp);
-        fade_rgba8888_draw(&polydisp, play->fade_color_value);  
+        fade_rgba8888_draw(&polydisp, play->fade_color_value.rgba8888);  
         
         gSPEndDisplayList(polydisp++);
 

@@ -8,12 +8,16 @@
 #include "m_npc_schedule.h"
 #include "m_actor_dlftbls.h"
 #include "m_npc.h"
+#include "c_keyframe.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define aNPC_SPNPC_BIT_CURATOR 0
+#define aNPC_SPNPC_BIT_GOHOME_NPC 1
+#define aNPC_SPNPC_BIT_MASK_CAT 2
+#define aNPC_SPNPC_BIT_DOZAEMON 4
 #define aNPC_SPNPC_BIT_EV_SONCHO 5
 
 #define aNPC_SPNPC_BIT_GET(field, bit) (((field) >> (bit)) & 1)
@@ -35,7 +39,7 @@ enum {
 
   aNPC_ATTENTION_TYPE_NUM
 };
-
+ 
 enum {
   aNPC_THINK_WAIT,
   aNPC_THINK_WANDER,
@@ -134,13 +138,35 @@ typedef struct npc_info_s {
   mActor_name_t npc_name;
 } NpcActorInfo_c;
 
+typedef struct npc_animation_s {
+  cKF_SkeletonInfo_R_c keyframe;
+  s_xyz work[27];
+  s_xyz morph[27];
+  int _1B4;
+  s8 animation_id; 
+} aNPC_ANIMATION_c;
+
 /* TODO: draw data */
 typedef struct npc_draw_info_s {
-  /* 0x000 */ u8 _000[0x584 - 0x000];
+  /* 0x000 */ int main_animation_frame;
+  /* 0x004 */ int _04; // TODO: figure out where this is set
+  /* 0x008 */ int main_animation_frame_changed;
+  /* 0x00C */ int _08; // TODO: figure out where this is set
+  /* 0x010 */ int _0C; // TODO: figure out where this is set
+  /* 0x014 */ aNPC_ANIMATION_c main_animation;
+  /* 0x1D0 */ aNPC_ANIMATION_c sub_animation0;
+  /* 0x38C */ aNPC_ANIMATION_c sub_animation1;
+  /* 0x548 */ u8 _548[0x580 - 0x548];
+  /* 0x580 */ int animation_id;
   /* 0x584 */ int texture_bank_idx;
-  /* 0x588 */ u8 _588[0x5BD - 0x588];
+  /* 0x588 */ u8 _588[0x5B9 - 0x588]; 
+  /* 0x5B9 */ u8 _5B9;
+  /* 0x5BA */ u8 _5BA;
+  /* 0x5BB */ u8 _5BB;
+  /* 0x5BC */ u8 _5BC;
   /* 0x5BD */ u8 _5BD;
-  /* 0x5BE */ u8 _5BE[0x630 - 0x5BE];
+  /* 0x5BE */ u8 _5BE;
+  /* 0x5BE */ u8 _5BF[0x630 - 0x5BF];
 } aNPC_draw_info_c;
 
 typedef void (*aNPC_THINK_PROC)(NPC_ACTOR*, GAME_PLAY*, int);
@@ -364,8 +390,7 @@ typedef void (*aNPC_SUB_PROC)(NPC_ACTOR* npc_actorx, GAME_PLAY* play);
 
 struct npc_actor_s {
   ACTOR actor_class;
-  int _174;
-  int _178;
+  s_xyz _174;
   NpcActorInfo_c npc_info;
   aNPC_draw_info_c draw;
   aNPC_think_info_c think;
@@ -407,6 +432,11 @@ typedef struct npc_control_actor_s {
   aNPC_cloth_c cloth[10];
   u8 _8F4[0x9D8 - 0x8F4]; // TODO
 } NPC_CONTROL_ACTOR;
+
+typedef struct npc_destruct_table_proc{
+    aNPC_SUB_PROC unk0;
+    aNPC_SUB_PROC unk4;
+}NPC_DT_PROCS;
 
 extern ACTOR_PROFILE Npc_Profile;
 

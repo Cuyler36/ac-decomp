@@ -11,6 +11,8 @@ dump/*
 *.exe
 *.dll
 *.arc
+*.ctx
+ctx.c
 build.ninja
 ac-decomp.code-workspace
 assets/
@@ -18,3 +20,4 @@ tools/cli.ini
 tools/cli.py
 src/data/bin1
 src/data/bin2
+objdiff.json
