@@ -894,6 +894,7 @@ static void aSEN_trans_prg2_for_agb_end_wait_talk_proc(NPC_SENDO_ACTOR* sendo, G
 }
 
 static void aSEN_chk_power_agb_talk_proc(NPC_SENDO_ACTOR* sendo, GAME_PLAY* play) {
+  #ifdef USE_GBA_FOR_ISLAND
   switch (mGcgba_ConnectEnabled()) {
     case GBA2_GBA_STATE_SUCCESS:
     {
@@ -930,6 +931,10 @@ static void aSEN_chk_power_agb_talk_proc(NPC_SENDO_ACTOR* sendo, GAME_PLAY* play
       break;
     }
   }
+  #else
+  mGcgba_InitVar();
+  aSEN_change_talk_proc(sendo, aSEN_TALK_CHK_EXIST_ISLAND_DATA_IN_AGB);
+  #endif
 }
 
 static void aSEN_chk_exist_island_data_in_agb_talk_proc(NPC_SENDO_ACTOR* sendo, GAME_PLAY* play) {
