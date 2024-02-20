@@ -39,6 +39,24 @@ typedef unsigned int uintptr_t; // Manually added
 typedef void* unkptr;
 typedef u32 unknown;
 
+#define S8_MIN (s8)0x80
+#define S8_MAX (s8)0x7F
+
+#define U8_MIN (u8)0x00
+#define U8_MAX (u8)0xFF
+
+#define S16_MIN (s16)0x8000
+#define S16_MAX (s16)0x7FFF
+
+#define U16_MIN (u16)0x0000
+#define U16_MAX (u16)0xFFFF
+
+#define S32_MIN (s32)0x80000000
+#define S32_MAX (s32)0x7FFFFFFF
+
+#define U32_MIN (u32)0x00000000
+#define U32_MAX (u32)0xFFFFFFFF
+
 #define TRUE 1
 #define FALSE 0
 #define NULL ((void*)0)
@@ -46,8 +64,8 @@ typedef u32 unknown;
 
 #define AT_ADDRESS(x) : (x)
 
-#define ALIGN_PREV(u, align) (u & (~(align-1)))
-#define ALIGN_NEXT(u, align) ((u + (align-1)) & (~(align-1)))
+#define ALIGN_PREV(u, align) (u & (~(align - 1)))
+#define ALIGN_NEXT(u, align) ((u + (align - 1)) & (~(align - 1)))
 #define IS_ALIGNED(X, N) (((X) & ((N)-1)) == 0)
 #define IS_NOT_ALIGNED(X, N) (((X) & ((N)-1)) != 0)
 
@@ -91,34 +109,38 @@ typedef u32 unknown;
 #define F32_IS_ZERO(v) (fabsf(v) < 0.008f)
 
 /* ARGB8 color format (32 bits) to RGB5A3 color format (16 bits) */
-#define ARGB8_to_RGB5A3(argb8) \
-  ((u16)(((argb8) & 0xFF000000) >= 0xE0000000 ? \
-   /* Fully opaque, 5 bits per color channel */ (0x8000 | ((((argb8) >> 16) & 0xF8) << 7) | ((((argb8) >> 8) & 0xF8) << 2) | (((argb8) & 0xFF) >> 3)) : \
-   /* 3 bits of transparency, 4 bits per color channel */ (((((argb8) >> 24) & 0xE0) << 7) | ((((argb8) >> 16) & 0xF0) << 4) | (((argb8) >> 8) & 0xF0) | (((argb8) & 0xF0) >> 4))))
+#define ARGB8_to_RGB5A3(argb8)                                                                                         \
+    ((u16)(((argb8)&0xFF000000) >= 0xE0000000                                                                          \
+               ? /* Fully opaque, 5 bits per color channel */ (0x8000 | ((((argb8) >> 16) & 0xF8) << 7) |              \
+                                                               ((((argb8) >> 8) & 0xF8) << 2) | (((argb8)&0xFF) >> 3)) \
+               : /* 3 bits of transparency, 4 bits per color channel */ (                                              \
+                     ((((argb8) >> 24) & 0xE0) << 7) | ((((argb8) >> 16) & 0xF0) << 4) | (((argb8) >> 8) & 0xF0) |     \
+                     (((argb8)&0xF0) >> 4))))
 
-#define GPACK_RGB5A3(r, g, b, a) ARGB8_to_RGB5A3((((a) & 0xFF) << 24) | (((r) & 0xFF) << 16) | (((g) & 0xFF) << 8) | ((b) & 0xFF))
+#define GPACK_RGB5A3(r, g, b, a) \
+    ARGB8_to_RGB5A3((((a)&0xFF) << 24) | (((r)&0xFF) << 16) | (((g)&0xFF) << 8) | ((b)&0xFF))
 
 #pragma section RX "forcestrip"
-#ifndef __INTELLISENSE__ 
-    #define FORCESTRIP __declspec(section "forcestrip")
+#ifndef __INTELLISENSE__
+#define FORCESTRIP __declspec(section "forcestrip")
 #else
-    #define FORCESTRIP
+#define FORCESTRIP
 #endif
 
 #ifdef MUST_MATCH
-    #define MATCH_FORCESTRIP FORCESTRIP
+#define MATCH_FORCESTRIP FORCESTRIP
 #else
-    #define MATCH_FORCESTRIP
+#define MATCH_FORCESTRIP
 #endif
 
 #if !defined(__INTELLISENSE__) && defined(MUST_MATCH)
-    #define BSS_ORDER_GROUP_START FORCESTRIP ORDER_BSS_DATA {
-    #define BSS_ORDER_GROUP_END }
-    #define BSS_ORDER_ITEM(v) ORDER_BSS(v)
+#define BSS_ORDER_GROUP_START FORCESTRIP ORDER_BSS_DATA {
+#define BSS_ORDER_GROUP_END }
+#define BSS_ORDER_ITEM(v) ORDER_BSS(v)
 #else
-    #define BSS_ORDER_GROUP_START
-    #define BSS_ORDER_GROUP_END
-    #define BSS_ORDER_ITEM(v)
+#define BSS_ORDER_GROUP_START
+#define BSS_ORDER_GROUP_END
+#define BSS_ORDER_ITEM(v)
 #endif
 
 #endif
