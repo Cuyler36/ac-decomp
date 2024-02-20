@@ -35,6 +35,7 @@ extern "C" {
 #define mNpc_ISLAND_FTR_NUM 16
 #define mNpc_EVENT_NPC_NUM 5
 #define mNpc_MASK_NPC_NUM 3
+#define mNpc_ISLANDER_NO ANIMAL_NUM_MAX
 
 enum {
   mNpc_MOOD_0,
@@ -95,7 +96,13 @@ enum {
   mNpc_FEEL_SLEEPY,
   mNpc_FEEL_PITFALL,
 
-  mNpc_FEEL_NUM
+  mNpc_FEEL_NUM,
+
+  mNpc_FEEL_6 = mNpc_FEEL_NUM,
+  mNpc_FEEL_UZAI_0,
+  mNpc_FEEL_UZAI_1,
+
+  mNpc_FEEL_ALL_NUM
 };
 
 enum {
@@ -333,7 +340,7 @@ extern void mNpc_CopyAnimalInfo(Animal_c* dst, Animal_c* src);
 extern int mNpc_SearchAnimalinfo(Animal_c* animal, mActor_name_t npc_id, int count);
 extern Animal_c* mNpc_GetAnimalInfoP(mActor_name_t npc_id);
 extern int mNpc_SearchAnimalPersonalID(AnmPersonalID_c* anm_pid);
-extern AnmPersonalID_c* mNpc_GetOtherAnimalPersonalIDOtherBlock(AnmPersonalID_c* pids, int count, int bx, int bz, int check_flag);
+extern AnmPersonalID_c* mNpc_GetOtherAnimalPersonalIDOtherBlock(AnmPersonalID_c* exclude_pids, int count, int bx, int bz, int check_flag);
 extern AnmPersonalID_c* mNpc_GetOtherAnimalPersonalID(AnmPersonalID_c* pids, int count);
 extern void mNpc_SetAnimalThisLand(Animal_c* animal, int count);
 extern int mNpc_GetSameLooksNum(u8 looks);
@@ -424,10 +431,10 @@ extern int mNpc_GetMakeUtNuminBlock(int* ut_x, int* ut_z, int bx, int bz);
 extern int mNpc_GetMakeUtNuminBlock33(int* make_ut_x, int* make_ut_z, int ut_x, int ut_z, int bx, int bz);
 extern int mNpc_GetMakeUtNuminBlock_hide_hard_area(int* ut_x, int* ut_z, int bx, int bz, int restrict_area);
 extern void mNpc_ClearTalkInfo();
-extern int mNpc_CheckOverImpatient(int animal_idx, int feel);
-extern int mNpc_GetOverImpatient(int animal_idx, int feel);
+extern int mNpc_CheckOverImpatient(int animal_idx, int looks);
+extern int mNpc_GetOverImpatient(int animal_idx, int looks);
 extern int mNpc_CheckQuestRequest(int animal_idx);
-extern void mNpc_SetQuestRequestOFF(int animal_idx, int feel);
+extern void mNpc_SetQuestRequestOFF(int animal_idx, int looks);
 extern void mNpc_TalkInfoMove();
 extern void mNpc_TalkEndMove(int animal_idx, int feel);
 extern int mNpc_GetNpcFloorNo();

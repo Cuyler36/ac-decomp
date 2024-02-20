@@ -6,3 +6,6 @@ prettytable
 python-Levenshtein
 watchdog
 pyjkernel
+pcpp
+pyperclip
+ruamel.yaml

@@ -147,16 +147,65 @@ config/rel.yml:
   con_sentaku2_v:
     addrs: [0x80650880, 0x806508C0]
     type: vtx
-  # ac_boat_demo
-  aBTD_island_prg:
-    addrs: [0x8065FD4C, 0x80674F90]
-  aBTD_island_ldr:
-    addrs: [0x80674F90, 0x806817CC]
+  # m_msg
   wipe1_v:
     addrs: [0x80652AD0, 0x80652C60]
     type: vtx
   g_wipe1_txt:
     addrs: [0x80652C60, 0x80653460]
+  msg/con_kaiwa2_w1_tex:
+    addrs: [0x80657360, 0x80657B60]
+  msg/con_kaiwa2_w2_tex:
+    addrs: [0x80657B60, 0x80658B60]
+  msg/con_kaiwa2_w3_tex:
+    addrs: [0x80658B60, 0x80659B60]
+  msg/con_kaiwa2_v:
+    addrs: [0x80659B60, 0x80659CE0]
+    type: vtx
+  msg/con_namefuti_TXT:
+    addrs: [0x80659D60, 0x8065A160]
+  msg/con_kaiwaname_v:
+    addrs: [0x8065A160, 0x8065A1A0]
+    type: vtx
+  # ac_boat_demo
+  aBTD_island_prg:
+    addrs: [0x8065FD4C, 0x80674F90]
+  aBTD_island_ldr:
+    addrs: [0x80674F90, 0x806817CC]
+  aKOI_obj_e_koinobori_a_pal:
+    addrs: [0x806C5900, 0x806C5920]
+    type: pal16
+  obj_e_koinobori_b_pal:
+    addrs: [0x806C5920, 0x806C5940]
+    type: pal16
+  # ac_lotus
+  aLOT_obj_01_lotus_pal:
+    addrs: [0x806C59E0, 0x806C5A00]
+    type: pal16
+  obj_02_lotus_pal:
+    addrs: [0x806C5A00, 0x806C5A20]
+    type: pal16
+  obj_03_lotus_pal:
+    addrs: [0x806C5A20, 0x806C5A40]
+    type: pal16
+  obj_04_lotus_pal:
+    addrs: [0x806C5A40, 0x806C5A60]
+    type: pal16
+  obj_05_lotus_pal:
+    addrs: [0x806C5A60, 0x806C5A80]
+    type: pal16
+  obj_06_lotus_pal:
+    addrs: [0x806C5A80, 0x806C5AA0]
+    type: pal16
+  obj_07_lotus_pal:
+    addrs: [0x806C5AA0, 0x806C5AC0]
+    type: pal16
+  obj_08_lotus_pal:
+    addrs: [0x806C5AC0, 0x806C5AE0]
+    type: pal16
+  obj_09_lotus_pal:
+    addrs: [0x806C5AE0, 0x806C5B00]
+    type: pal16
   mFM_beach_pal_0:
     addrs: [0x80C59CA8, 0x80C59CC8]
     type: pal16
@@ -340,3 +389,4 @@ config/rel.yml:
   mFM_rail_pal_12:
     addrs: [0x80F8C448, 0x80F8C468]
     type: pal16
+  # ac_koinobori

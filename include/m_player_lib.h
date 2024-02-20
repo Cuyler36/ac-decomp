@@ -55,6 +55,7 @@ extern void mPlib_Set_boat_angleZ(s16 angleZ);
 extern int mPlib_Get_end_player_demo_walk();
 extern int mPlib_request_main_demo_geton_boat_type1(f32 goal_x, f32 goal_z, s16 angleY);
 extern int mPlib_request_main_demo_getoff_boat_standup_type1(const xyz_t* pos, s16 angleY);
+extern int mPlib_check_player_actor_main_index_RecieveMove(GAME* game);
 
 extern mPlayer_change_data_from_submenu_c* mPlib_Get_change_data_from_submenu_p();
 
@@ -62,7 +63,7 @@ extern void mPlib_Object_Exchange_keep_new_PlayerMdl(GAME_PLAY* play);
 extern void mPlib_Object_Exchange_keep_new_PlayerTex(GAME_PLAY* play, int bank_id, int base_idx);
 extern void mPlib_Object_Exchange_keep_new_PlayerFaceTex(GAME_PLAY* play);
 extern void mPlib_Object_Exchange_keep_new_PlayerFacePallet(GAME_PLAY* play, int bank_id, int base_idx);
-extern void mPlib_request_main_give_type1(GAME_PLAY* play, mActor_name_t item, int mode, int present, int on_surface);
+extern void mPlib_request_main_give_type1(GAME* game, mActor_name_t item, int mode, int present, int on_surface);
 
 #define GET_PLAYER_ACTOR(play) get_player_actor_withoutCheck(play)
 #define GET_PLAYER_ACTOR_NOW() get_player_actor_withoutCheck((GAME_PLAY*)gamePT)
