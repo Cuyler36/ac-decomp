@@ -5,6 +5,10 @@
 #include "m_player_lib.h"
 #include "sys_matrix.h"
 
+#include "m_needlework.h"
+#include "_mem.h"
+#include "m_common_data.h"
+
 static void Mural_Actor_ct(ACTOR* actorx, GAME* game);
 static void Mural_Actor_dt(ACTOR* actorx, GAME* game);
 static void Mural_Actor_move(ACTOR* actorx, GAME* game);
@@ -14,7 +18,7 @@ ACTOR_PROFILE Mural_Profile = {
     mAc_PROFILE_MURAL,
     ACTOR_PART_BG,
     ACTOR_STATE_CAN_MOVE_IN_DEMO_SCENES | ACTOR_STATE_NO_DRAW_WHILE_CULLED | ACTOR_STATE_NO_MOVE_WHILE_CULLED,
-    EMPTY_NO,
+    MISC_ACTOR_MURAL,
     ACTOR_OBJ_BANK_MURAL,
     sizeof(MURAL_ACTOR),
     &Mural_Actor_ct,
@@ -50,8 +54,16 @@ static void Mural_Actor_move(ACTOR* actorx, GAME* game) {
         if (REGADDR(TAKREG, 12) >= 0 && REGADDR(TAKREG, 12) < 255) {
             if (REGADDR(TAKREG, 11) >= 0 && REGADDR(TAKREG, 11) < aML_MURAL_NUM) {
                 mural->mural[REGADDR(TAKREG, 11)].type = REGADDR(TAKREG, 10);
-                mPlib_Load_PlayerTexAndPallet(mural->mural[REGADDR(TAKREG, 11)].tex_p,
-                                              mural->mural[REGADDR(TAKREG, 11)].pal_p, REGADDR(TAKREG, 12));
+
+                if (REGADDR(TAKREG, 10) == 0) {
+                    mPlib_Load_PlayerTexAndPallet(mural->mural[REGADDR(TAKREG, 11)].tex_p,
+                                                  mural->mural[REGADDR(TAKREG, 11)].pal_p, REGADDR(TAKREG, 12));
+                } else {
+                    const mNW_original_design_c* design_p = &Common_Get(now_private)->my_org[REGADDR(TAKREG, 12) & 7];
+                    memcpy(mural->mural[REGADDR(TAKREG, 11)].tex_p, design_p->design.data, (32 * 32) / 2);
+                    memcpy(mural->mural[REGADDR(TAKREG, 11)].pal_p, mNW_PaletteIdx2Palette(design_p->palette),
+                           16 * sizeof(u16));
+                }
             }
         }
     }

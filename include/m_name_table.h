@@ -2258,6 +2258,7 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 
 #define MISC_ACTOR_START 0x9000
 #define MISC_ACTOR_SAMPLE MISC_ACTOR_START
+#define MISC_ACTOR_MURAL (MISC_ACTOR_START + 128) // 0x9080
 
 #define ACTOR_PROP_START 0xA000
 #define ACTOR_PROP_MAILBOX0 (ACTOR_PROP_START + 0) // A000

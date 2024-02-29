@@ -5,6 +5,8 @@ static Vtx obj_mural_v[] = {
 #include "assets/obj_mural_v.inc"
 };
 
+#define BUGFIXES
+
 Gfx obj_mural_model[] = {
     gsSPTexture(65535, 65535, 0, G_TX_RENDERTILE, G_ON),
     gsDPPipeSync(),
@@ -26,5 +28,7 @@ Gfx obj_mural_model[] = {
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSPEndDisplayList(),
 };
+
+#undef BUGFIXES
 
 // clang-format on
