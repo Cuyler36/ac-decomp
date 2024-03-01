@@ -3,6 +3,7 @@
 #include "m_name_table.h"
 #include "m_common_data.h"
 #include "dolphin/os.h"
+#include "sys_matrix.h"
 
 static void Design_Actor_ct(ACTOR* actorx, GAME* game);
 static void Design_Actor_dt(ACTOR* actorx, GAME* game);
@@ -27,15 +28,10 @@ static void aDS_UpdatePatternInfo(DESIGN_ACTOR* design_actor);
 
 static void Design_Actor_ct(ACTOR* actorx, GAME* game) {
     DESIGN_ACTOR* design = (DESIGN_ACTOR*)actorx;
-    int i;
 
     actorx->gravity = 0.0f;
-
-    for (i = 0; i < UT_TOTAL_NUM; i++) {
-        design->designs[i].player_no = -1;
-    }
-
-    aDS_UpdatePatternInfo(design);
+    design->player_block.x = -1;
+    design->player_block.z = -1;
 }
 
 static void Design_Actor_dt(ACTOR* actorx, GAME* game) {
@@ -47,6 +43,7 @@ static void aDS_UpdatePatternInfo(DESIGN_ACTOR* design_actor) {
 
     if (fg_p != NULL) {
         xyz_t center_pos;
+        s_xyz bg_y_angle_s;
         aDS_design_c* design_p = design_actor->designs;
         int i;
 
@@ -68,9 +65,16 @@ static void aDS_UpdatePatternInfo(DESIGN_ACTOR* design_actor) {
                 mFI_BkandUtNum2CenterWpos(&center_pos, bx, bz, ut_x, ut_z);
                 design_p->bg_y = (u16)mCoBG_GetBgY_OnlyCenter_FromWpos(center_pos, 0.0f);
 
-                OSReport("Pattern: X: %d, Z: %d, - pl_no: %d, design_no: %d, bg_y: %.02f\n", ut_x, ut_z,
-                         design_p->player_no, design_p->design_no, design_p->bg_y);
+                /* Get the angle for the ground tile */
+                mCoBG_GetBgY_AngleS_FromWpos(&bg_y_angle_s, center_pos, 0.0f);
+                design_p->rot_x = bg_y_angle_s.x;
+                design_p->rot_z = bg_y_angle_s.z;
 
+#ifdef DESIGN_DEBUG
+                OSReport("Pattern: X: %d, Z: %d, - pl_no: %d, design_no: %d, bg_y: %.02f, rot_x: %d, rot_z: %d\n", ut_x,
+                         ut_z, design_p->player_no, design_p->design_no, design_p->bg_y, design_p->rot_x,
+                         design_p->rot_z);
+#endif
             } else {
                 design_p->player_no = -1; // no design here
             }
@@ -78,17 +82,36 @@ static void aDS_UpdatePatternInfo(DESIGN_ACTOR* design_actor) {
     }
 }
 
+static inline int aDS_GetPlayerBlockOK(int bx, int bz) {
+    if (bx <= 0 || bz <= 0) {
+        return FALSE;
+    }
+
+    if ((bx - 1) >= FG_BLOCK_X_NUM || (bz - 1) >= FG_BLOCK_Z_NUM) {
+        if ((bx == mISL_BLOCK_X0 || bx == mISL_BLOCK_X1) && bz == mISL_BLOCK_Z) {
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 static void Design_Actor_move(ACTOR* actorx, GAME* game) {
     DESIGN_ACTOR* design = (DESIGN_ACTOR*)actorx;
-    int player_bx;
-    int player_bz;
+    GAME_PLAY* play = (GAME_PLAY*)game;
+    int player_bx = play->block_table.block_x;
+    int player_bz = play->block_table.block_z;
 
-    if (mFI_GetNextBlockNum(&player_bx, &player_bz) == TRUE &&
+    if (aDS_GetPlayerBlockOK(player_bx, player_bz) &&
         (design->player_block.x != player_bx || design->player_block.z != player_bz)) {
         design->player_block.x = player_bx;
         design->player_block.z = player_bz;
 
-        OSReport("Updating patterns due to new acre\n");
+#ifdef DESIGN_DEBUG
+        OSReport("Updating patterns due to new acre, bx: %d bz: %d\n", player_bx, player_bz);
+#endif
 
         /* Update all patterns */
         aDS_UpdatePatternInfo(design);
@@ -96,10 +119,10 @@ static void Design_Actor_move(ACTOR* actorx, GAME* game) {
 }
 
 static Vtx aDS_design_v[] = {
-    { -2000, 0, 2000, 0, 0, 0, 0, 0, 120, 255 },       // bl
-    { -2000, 0, -2000, 0, 0, 1000, 0, 0, 120, 255 },   // tl
-    { 2000, 0, -2000, 0, 1000, 1000, 0, 0, 120, 255 }, // tr
-    { 2000, 0, 2000, 0, 1000, 0, 0, 0, 120, 255 },     // br
+    { -2000, 0, 2000, 0, 0, 0, 0, 120, 0, 255 },       // bl
+    { -2000, 0, -2000, 0, 0, 1000, 0, 120, 0, 255 },   // tl
+    { 2000, 0, -2000, 0, 1000, 1000, 0, 120, 0, 255 }, // tr
+    { 2000, 0, 2000, 0, 1000, 0, 0, 120, 0, 255 },     // br
 };
 
 static Gfx aDS_design_model[] = {
@@ -129,11 +152,14 @@ static void Design_Actor_draw(ACTOR* actorx, GAME* game) {
     int z;
     int x;
 
+    /* Get the starting position of the current acre we're in */
     mFI_BkNum2WposXZ(&block_pos_x, &block_pos_z, design_actor->player_block.x, design_actor->player_block.z);
     for (z = 0; z < UT_Z_NUM; z++) {
+        /* We want to start in the center of the unit, not the side */
         ofs_x = mFI_UT_WORLDSIZE_HALF_X_F;
 
         for (x = 0; x < UT_X_NUM; x++) {
+            /* Only render designs which are actually placed */
             if (design->player_no != -1) {
                 const mNW_original_design_c* const org_design_p =
                     &Save_Get(private[design->player_no]).my_org[design->design_no];
@@ -143,7 +169,11 @@ static void Design_Actor_draw(ACTOR* actorx, GAME* game) {
 
                 OPEN_DISP(game->graph);
 
+                /* Move render position to the center of the unit, add small Y amount to stop Z-fighting */
                 Matrix_translate(block_pos_x + ofs_x, bg_y + 0.5f, block_pos_z + ofs_z, 0);
+                /* Rotate on the X axiz & Z axis to match ground orientation (don't care about Y) */
+                Matrix_rotateXYZ(design->rot_x, 0, design->rot_z, 1);
+                /* Apply default scaling factor */
                 Matrix_scale(0.01f, 0.01f, 0.01f, 1);
 
                 /* Segment 8 holds the palette */
