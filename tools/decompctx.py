@@ -8,8 +8,11 @@
 
 import os
 import re
+import typing
 import argparse
 import pyperclip
+from glob import glob
+from re import Pattern
 from io import StringIO
 from pcpp import Preprocessor
 from pcpp import CmdPreprocessor
@@ -17,6 +20,7 @@ from contextlib import redirect_stdout
 
 #region Context Options
 class ContextGenerationOptions:
+    should_strip_declspec = False
     should_strip_attributes = False
     should_strip_at_address = False
     should_convert_binary_literals = False
@@ -25,10 +29,11 @@ class ContextGenerationOptions:
 #endregion
 
 #region Regex Patterns
-at_address_pattern = re.compile(r"(?:.*?)(?:[a-zA-Z_$][\w$]*\s*\*?\s[a-zA-Z_$][\w$]*)\s*((?:AT_ADDRESS|:)(?:\s*\(?\s*)(0x[0-9a-fA-F]+|[a-zA-Z_$][\w$]*)\)?);")
+at_address_pattern = re.compile(r"(?:.*?)(?:[a-zA-Z_$][\w$]*\s*\*?\s[a-zA-Z_$][\w$\[\]]*)\s*((?:AT_ADDRESS|:)(?:\s*\(?\s*)(0x[0-9a-fA-F]+|[a-zA-Z_$][\w$]*)\)?);")
 attribute_pattern = re.compile(r"(__attribute__)")
+declspec_pattern = re.compile(r"(__declspec)")
 binary_literal_pattern = re.compile(r"\b(0b[01]+)\b")
-trailing_initializer_pattern = re.compile(r"^.*?=\s*\{(?:.|\s)+?(,)\s*(?:\/\/.*?|\/\*.*?\*\/)*\s*?\}\s*;", re.MULTILINE)
+trailing_initializer_pattern = re.compile(r"^.*?=\s*\{(?:.|\s)+?(,)?\s*(?:\/\/.*?|\/\*.*?\*\/)*\s*?\}\s*;", re.MULTILINE)
 enum_array_size_initializer_pattern = re.compile(r"\[\s*([a-zA-Z_$][\w$]*)\s*\]\s*;")
 enum_declaration_pattern = re.compile(r"^.*(?:typedef\s+)*enum\s(?:[a-zA-Z_$][\w$]*)*\s*\{\s*((?:.|\s)*?)\}\s*(?:[a-zA-Z_$][\w$]*)*\s*;", re.MULTILINE)
 enum_value_pattern = re.compile(r"([a-zA-Z_$][\w$]*)\s*(?:=\s*(.*))*")
@@ -38,14 +43,14 @@ cast_patterns = re.compile(r"\(int\)")
 #endregion
 
 #region Defaults
-default_defines: dict[str, str] = {"__MWERKS__" : "1", "_LANGUAGE_C": "1", "F3DEX_GBI_2": "1"}
+default_defines: typing.Dict[str, str] = {"__MWERKS__" : "1", "_LANGUAGE_C": "1", "F3DEX_GBI_2": "1"}
 
 src_dir = "src"
 include_dir = "include"
 cwd_dir = os.getcwd()
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = os.path.abspath(os.path.join(script_dir, ".."))
-default_include_directories: list[str] = [
+default_include_directories: typing.List[str] = [
     os.path.join(root_dir, src_dir),
     os.path.join(root_dir, include_dir),
     os.path.join(script_dir, src_dir),
@@ -111,6 +116,44 @@ def strip_attributes(text_to_strip: str)->str:
     return text_to_strip
 #endregion
 
+#region declspec Stripping
+def strip_declspec(text_to_strip: str)->str:
+    if not text_to_strip:
+        return text_to_strip
+    
+    declspec_matches = reversed(list(re.finditer(declspec_pattern, text_to_strip)))
+    for declspec_match in declspec_matches:
+        # Find the end index of the second double paranthesis
+        paren_count = 0
+
+        match_span = declspec_match.span(0)
+        end_index = match_span[1]
+        declspec_opened = False
+        while end_index < len(text_to_strip):
+            if text_to_strip[end_index] == "(":
+                paren_count += 1
+
+                if paren_count == 1:
+                    declspec_opened = True
+            
+            if text_to_strip[end_index] == ")":
+                paren_count -= 1
+
+            if declspec_opened and paren_count == 0:
+                end_index += 1
+                break
+
+            end_index += 1
+
+        # Create the substring
+        start_index = match_span[0]
+        prefix = text_to_strip[0:start_index]
+        postfix = text_to_strip[end_index:len(text_to_strip)]
+        text_to_strip = prefix + postfix
+
+    return text_to_strip
+#endregion
+
 #region At Address Stripping
 def strip_at_address(text_to_strip: str) -> str:
     if not text_to_strip:
@@ -157,9 +200,12 @@ def strip_initializer_trailing_commas(text_to_strip: str) -> str:
         return text_to_strip
     
     trailing_comma_matches = reversed(list(re.finditer(trailing_initializer_pattern, text_to_strip)))
-    for attribute_match in trailing_comma_matches:
+    for comma_match in trailing_comma_matches:
         # Create the substring
-        match_span = attribute_match.span(1)
+        if not comma_match[1]:
+            continue
+
+        match_span = comma_match.span(1)
         start_index = match_span[0]
         end_index = match_span[1]
         prefix = text_to_strip[0:start_index]
@@ -186,7 +232,7 @@ def replace_enums_with_numeric_values(text_to_strip: str)->str:
         return text_to_strip
     
     preprocessor = Preprocessor()
-    enum_to_numeric_dict : dict[str, int] = {}
+    enum_to_numeric_dict : typing.Dict[str, int] = {}
     for enum_declaration in enum_declarations:
         enum_members = enum_declaration[1]
         split_enum_members = enum_members.split(",")
@@ -259,7 +305,7 @@ def replace_enums_with_numeric_values(text_to_strip: str)->str:
 #endregion
 
 #region Preprocessing
-def generate_context(preprocessor_arguments: list[str], context_options: ContextGenerationOptions)->str:
+def generate_context(preprocessor_arguments: typing.List[str], context_options: ContextGenerationOptions)->str:
     # Create the temp string writer to pass to the preprocessor since we still want to modify
     # the contents for project-specific conditions
     with StringIO() as preprocessor_string_writer:
@@ -273,7 +319,7 @@ def generate_context(preprocessor_arguments: list[str], context_options: Context
                 return None
             
             # Do we need to sanitize this further?
-            if not context_options.should_strip_attributes and not context_options.should_strip_at_address and not context_options.should_strip_initializer_trailing_commas and not context_options.should_convert_binary_literals:
+            if not context_options.should_strip_declspec and not context_options.should_strip_attributes and not context_options.should_strip_at_address and not context_options.should_strip_initializer_trailing_commas and not context_options.should_convert_binary_literals:
                 # No sanitation needed, so write the entire file out
                 return preprocessor_string_writer.getvalue()
             
@@ -285,6 +331,9 @@ def generate_context(preprocessor_arguments: list[str], context_options: Context
                     line_to_write = preprocessor_string_writer.readline()
                     if not line_to_write:
                         break
+
+                    if context_options.should_strip_declspec:
+                        line_to_write = strip_declspec(line_to_write)
 
                     if context_options.should_strip_attributes:
                         line_to_write = strip_attributes(line_to_write)
@@ -319,6 +368,7 @@ def main():
     parser.add_argument("-h", "-help", "--help", dest="help", action="store_true")
     parser.add_argument("-n64", "--n64-sdk", dest="n64_sdk", help="Path to the N64 SDK top level directory", action="store")
     parser.add_argument('-D', dest = 'defines', metavar = 'macro[=val]', nargs = 1, action = 'append', help = 'Predefine name as a macro [with value]')
+    parser.add_argument("--strip-declspec", dest="strip_declspec", help="If __declspec() string should be stripped", action="store_true", default=False)
     parser.add_argument("--strip-attributes", dest="strip_attributes", help="If __attribute__(()) string should be stripped", action="store_true", default=False)
     parser.add_argument("--strip-at-address", dest="strip_at_address", help="If AT_ADDRESS or : formatted string should be stripped", action="store_true", default=False)
     parser.add_argument("--strip-initializer_trailing_commas", dest="strip_initializer_trailing_commas", help="If trailing commas in initializers should be stripped", action="store_true", default=False)
@@ -341,7 +391,7 @@ def main():
     known_args = parsed_args[0]
     
     preprocessor_arguments = ['pcpp']
-    if known_args.help or not known_args.c_file:
+    if known_args.help:
         # Since this script acts as a wrapper for the main pcpp script
         # we want to manually display the help and pass it through to the
         # pcpp preprocessor to show its full list of arguments
@@ -351,7 +401,7 @@ def main():
         return
 
     # Append in the default include directories
-    include_directories: list[str] = []
+    include_directories: typing.List[str] = []
     include_directories.extend(default_include_directories)
     n64_sdk = get_n64_sdk(known_args.n64_sdk)
     if n64_sdk:
@@ -362,12 +412,32 @@ def main():
 
     # Check if we have any passed in defines
     include_defines = []
-    known_defines: list[str] = []
+    known_defines: typing.List[str] = []
     if known_args.defines:
         argument_defines = [x[0] for x in known_args.defines]
         for define in argument_defines:
             include_defines.append(define)
             known_defines.append(define.split("=")[0])
+
+    if not known_args.c_file:
+        # If not file is specified it is assumed we want to create a mega context
+        # file that is the aggregate of all include files
+        include_files : typing.Set[str, str] = set()
+        for include_directory in default_include_directories:
+            files = [y for x in os.walk(include_directory) for y in glob(os.path.join(x[0], '*.h'))]
+            for include_file in files:
+                include_files.add(include_file)
+
+        # Add each file as an input so that pccpp can parse them into a single output file
+        # Sort the files for some consistency
+        sorted_files = list(include_files)
+        sorted_files.sort()
+        for include_file in include_files:
+            preprocessor_arguments.append(include_file)    
+    else:
+        # Add the file we want to read
+        c_file = known_args.c_file
+        preprocessor_arguments.append(known_args.c_file)
     
     # Add in the default defines unless explicitly passed in as arguments
     for default_define, default_define_value in default_defines.items():
@@ -397,12 +467,9 @@ def main():
     pass_through_args = parsed_args[1]
     preprocessor_arguments.extend(pass_through_args)
 
-    # Add the file we want to read
-    c_file = known_args.c_file
-    preprocessor_arguments.append(known_args.c_file)
-
     # Check if we need to do further conversions after the file is preprocessed
     context_options = ContextGenerationOptions()
+    context_options.should_strip_declspec = known_args.strip_declspec or known_args.ghidra or known_args.m2c
     context_options.should_strip_at_address = known_args.strip_at_address or known_args.ghidra or known_args.m2c
     context_options.should_strip_attributes = known_args.strip_attributes or known_args.m2c
     context_options.should_convert_binary_literals = known_args.convert_binary_literals or known_args.ghidra

@@ -4,12 +4,16 @@
 #include "types.h"
 #include "m_actor_type.h"
 #include "m_collision_bg.h"
+#include "m_name_table_floor_decl.h"
+#include "m_name_table_wall_decl.h"
 
 /* TODO: these defintions are likely included from an auto-gen source */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// clang-format off
 
 enum {
   NAME_TYPE_ITEM0,  /* Scenery items */
@@ -156,6 +160,11 @@ typedef struct offset_table_s {
 #define INSECT_NUM INSECT_ONLY_NUM + 5 // 5 spirits
 #define HUKUBUKURO_NUM 2
 #define KABU_NUM 4
+
+// #define WALL_MY_ORIG_START   (72)
+// #define WALL_MY_ORIG_NUM     (8)
+// #define WALL_MY_ORIG_END     ((WALL_MY_ORIG_START + WALL_MY_ORIG_NUM) - 1)
+// #define WALL_IS_MY_ORIG(idx) ((idx) >= WALL_MY_ORIG_START && (idx) <= WALL_MY_ORIG_END)
 
 #define PAPER_UNIQUE_NUM 64
 #define PAINT_NUM 12
@@ -2240,6 +2249,7 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define ETC_START 0x8000
 #define ETC_AIRPLANE ETC_START
 #define ETC_BALL (ETC_START + 1)
+#define ETC_MBG (ETC_START + 3)
 #define ETC_BOXTRICK (ETC_START + 4)
 #define ETC_BOXMANAGER (ETC_START + 5)
 #define ETC_SNOWMAN_BALL_A (ETC_START + 13)
@@ -2690,21 +2700,29 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define NPC_END      (NPC_START + 236)
 
 #define DUMMY_START 0xF000
+#define DUMMY_HOUSE0 0xF0F3
+#define DUMMY_HOUSE1 0xF0F4
+#define DUMMY_HOUSE2 0xF0F5
+#define DUMMY_HOUSE3 0xF0F6
 #define DUMMY_HANIWA0 0xF0FB
 #define DUMMY_HANIWA1 (DUMMY_HANIWA0 + 1)
 #define DUMMY_HANIWA2 (DUMMY_HANIWA1 + 1)
 #define DUMMY_HANIWA3 (DUMMY_HANIWA2 + 1)
 #define DUMMY_RESERVE 0xF102
 #define DUMMY_SHRINE 0xF103
+#define DUMMY_BROKER_SHOP 0xF104
+#define DUMMY_CAR 0xF106
 #define DUMMY_RADIO 0xF109
 #define DUMMY_YATAI 0xF10A
 #define DUMMY_TUKIMI 0xF10A
 #define DUMMY_MIKUJI 0xF10D
 #define DUMMY_TAMA 0xF110
 #define DUMMY_KOINOBORI 0xF114
+#define DUMMY_WINDMILL 0xF116
 #define DUMMY_LOTUS 0xF11B
 #define DUMMY_DOUZOU 0xF11D
 #define DUMMY_NAMEPLATE 0xF11F
+#define DUMMY_TENT 0xF127
 #define DUMMY_BOAT 0xF128
 
 #define RSV_DOOR 0xFE1B
@@ -2731,6 +2749,8 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define RSV_NO 0xFFFF /* reserved space, can't interact but no collision */
 
 #define mNT_IS_RESERVE(n) ((n) >= SIGN00 && (n) <= SIGN20)
+
+// clang-format on
 
 #ifdef __cplusplus
 }

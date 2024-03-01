@@ -178,7 +178,7 @@ def gather_symbols_for_section(address_offset: int, file_reader:TextIOWrapper, s
         section.symbols.append(symbol)
 
 def gather_tu_symbols(tu_name: str, map_path: str)->typing.Dict[str, SliceInfo]:
-    gathered_symbols: dict[str, SliceInfo] = {}
+    gathered_symbols: typing.Dict[str, SliceInfo] = {}
     tu_regex = re.compile(specific_tu_pattern_format.format(tu_name = tu_name))
 
     with open(map_path, "r", encoding="utf-8", newline="\n") as file_reader:
@@ -231,6 +231,7 @@ def update_asset_slice_config(tu_name: str, binary_slice_file_path: str, asset_s
 
         binary_commented_map = data[binary_commented_map_key]
 
+        insert_tu_name_comment = True
         for section in symbols_for_tu[".data"].sections:
             for asset_symbol in section.symbols:
                 print("Add entry for: " + asset_symbol.symbol_name + "? (y/n)")
@@ -244,10 +245,14 @@ def update_asset_slice_config(tu_name: str, binary_slice_file_path: str, asset_s
                 asset_commented_map : CommentedMap = None
                 if binary_commented_map.__contains__(asset_symbol.symbol_name):
                     asset_commented_map = binary_commented_map[asset_symbol.symbol_name]
+                    insert_tu_name_comment = False
                 else:
                     asset_commented_map = CommentedMap()
                     binary_commented_map.insert(len(binary_commented_map), asset_symbol.symbol_name, asset_commented_map)
-                    binary_commented_map.ca.insert(asset_symbol.symbol_name, asset_symbol.symbol_name)
+
+                    if insert_tu_name_comment:
+                        insert_tu_name_comment = False
+                        binary_commented_map.yaml_set_comment_before_after_key(key=asset_symbol.symbol_name, indent=2, before=tu_name)
 
                 # Add in the address range
                 address_commented_seq: CommentedSeq = None
