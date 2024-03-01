@@ -130,6 +130,10 @@ typedef struct {
 
 typedef struct {
     u8 type;
+    u8 param0;
+    u8 _01;
+    u8 _02;
+    u32 param1;
 } Scene_Word_Data_Misc_c;
 
 typedef union scene_word_u {
