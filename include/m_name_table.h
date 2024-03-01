@@ -553,6 +553,8 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define SIGNBOARD6_PLR3 (SIGNBOARD5_PLR3 + 1)
 #define SIGNBOARD7_PLR3 (SIGNBOARD6_PLR3 + 1)
 
+#define DESIGN00_PLR0 (SIGNBOARD_START + 64)
+
 #define FTR0_START 0x1000
 #define FTR_CLASSIC_WARDROBE 0x1004
 #define FTR_PAPA_BEAR 0x10E8
