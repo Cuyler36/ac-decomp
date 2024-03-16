@@ -555,6 +555,7 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 
 #define FTR0_START 0x1000
 #define FTR_CLASSIC_WARDROBE 0x1004
+#define FTR_FAN 0x1088
 #define FTR_PAPA_BEAR 0x10E8
 #define FTR_PAPA_BEAR_EAST 0x10E9
 #define FTR_PAPA_BEAR_NORTH 0x10EA
@@ -1121,6 +1122,9 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 
 #define FTR_UMBRELLA31_WEST 0x1D87
 #define FTR_UMBRELLA_END FTR_UMBRELLA31_WEST
+
+#define FTR_MYUMBRELLA_START 0x1D88
+#define FTR_MYUMBRELLA_END 0x1DA7
 
 #define FTR_FAMICOM_START 0x1DA8
 #define FTR_FAMICOM_CLU_CLU_LAND FTR_FAMICOM_START
@@ -2756,6 +2760,7 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define DUMMY_LOTUS 0xF11B
 #define DUMMY_DOUZOU 0xF11D
 #define DUMMY_NAMEPLATE 0xF11F
+#define DUMMY_FLAG 0xF122
 #define DUMMY_TENT 0xF127
 #define DUMMY_BOAT 0xF128
 

@@ -54,6 +54,8 @@ m_choice.c:
     .rodata: [0x80641828, 0x80641A90]
     .data: [0x8064F860, 0x80650960]
     .bss: [0x812633A0, 0x81263410]
+m_clip.c:
+    .text: [0x80385404, 0x80385430]
 m_cockroach.c:
     .text: [0x80385430, 0x80385A80]
 m_collision_obj.c:
@@ -417,6 +419,10 @@ ac_field_draw.c:
     .rodata: [0x80643F00, 0x80643F88]
     .data: [0x806829E0, 0x80682B68]
     .bss: [0x812F98C0, 0x812F9C28]
+ac_flag.c:
+    .text: [0x80423E30, 0x80424B88]
+    .rodata: [0x80643F88, 0x80643FC0]
+    .data: [0x80682B90, 0x80682C00]
 ac_handOverItem.c:
     .text: [0x80426A50, 0x80427624]
     .rodata: [0x806440A0, 0x806440B8]
@@ -593,6 +599,26 @@ ac_train_window.c:
     .text: [0x804AC510, 0x804AD428]
     .rodata: [0x80645FA8, 0x80645FF8]
     .data: [0x8068F600, 0x8068F830]
+bg_cherry_item.c:
+    .text: [0x804AFC14, 0x804B6FB4]
+    .rodata: [0x806460D8, 0x80646178]
+    .data: [0x8068FC68, 0x80692BE0]
+    .bss: [0x812FD4A8, 0x812FD938]
+bg_item.c:
+    .text: [0x804B6FB4, 0x804BE338]
+    .rodata: [0x80646178, 0x80646218]
+    .data: [0x80692BE0, 0x80695B38]
+    .bss: [0x812FD938, 0x812FDDC8]
+bg_winter_item.c:
+    .text: [0x804BE9FC, 0x804C5E30]
+    .rodata: [0x80646228, 0x806462C8]
+    .data: [0x80695D98, 0x80698D10]
+    .bss: [0x812FDDE8, 0x812FE278]
+ef_effect_control.c:
+    .text: [0x804CD474, 0x804CEC5C]
+    .rodata: [0x80646368, 0x806463C8]
+    .data: [0x8069BD10, 0x8069BFD0]
+    .bss: [0x812FE708, 0x81300BD0]
 ef_lamp_light.c:
     .text: [0x804CEC5C, 0x804CEF2C]
     .rodata: [0x806463C8, 0x806463D8]
@@ -632,6 +658,9 @@ m_random_field_ovl.c:
     .rodata: [0x80648ED0, 0x80648ED8]
     .data: [0x8069E918, 0x8069F070]
     .bss: [0x813010D0, 0x813013E0]
+ev_cherry_manager.c:
+    .text: [0x8050B3D0, 0x8050B404]
+    .data: [0x8069F070, 0x8069F098]
 ac_fuusen.c:
     .text: [0x8050DAC4, 0x8050F06C]
     .rodata: [0x80648FE8, 0x80649098]
@@ -886,6 +915,42 @@ ac_weather_leaf.c:
     .text: [0x8060420C, 0x806048B8]
     .rodata: [0x8064BBE8, 0x8064BC40]
     .data: [0x806D1E28, 0x806D1E48]
+ef_coin.c:
+    .text: [0x80608060, 0x806087EC]
+    .rodata: [0x8064BE48, 0x8064BEA0]
+    .data: [0x806D20C0, 0x806D2128]
+ef_flash.c:
+    .text: [0x8060B7B4, 0x8060BCB0]
+    .rodata: [0x8064C078, 0x8064C0B0]
+    .data: [0x806D2350, 0x806D2430]
+ef_footprint.c:
+    .text: [0x8060BCB0, 0x8060C21C]
+    .rodata: [0x8064C0B0, 0x8064C0E0]
+    .data: [0x806D2430, 0x806D2470]
+ef_killer.c:
+    .text: [0x80614178, 0x8061481C]
+    .rodata: [0x8064C680, 0x8064C6C0]
+    .data: [0x806D2EC0, 0x806D2F90]
+ef_make_hem.c:
+    .text: [0x806162B0, 0x8061710C]
+    .rodata: [0x8064C818, 0x8064C860]
+    .data: [0x806D3160, 0x806D31B8]
+ef_tent_lamp.c:
+    .text: [0x80622304, 0x8062260C]
+    .rodata: [0x8064CF10, 0x8064CF38]
+    .data: [0x806D3910, 0x806D3928]
+ef_yukidama.c:
+    .text: [0x806272EC, 0x80627914]
+    .rodata: [0x8064D150, 0x8064D180]
+    .data: [0x806D3C08, 0x806D3CA8]
+ef_yukidaruma.c:
+    .text: [0x80627914, 0x80627CB8]
+    .rodata: [0x8064D180, 0x8064D190]
+    .data: [0x806D3CA8, 0x806D3CD0]
+ef_yukihane.c:
+    .text: [0x80627CB8, 0x80627F88]
+    .rodata: [0x8064D190, 0x8064D1B0]
+    .data: [0x806D3CD0, 0x806D3D08]
 m_select.c:
     .text: [0x80627F88, 0x80629CA8]
     .rodata: [0x8064D1B0, 0x8064D1B8]
@@ -926,8 +991,13 @@ audio.c:
     .rodata: [0x8064D340, 0x8064D360]
     .data: [0x806D4CB0, 0x806D4D40]
     .bss: [0x8148DA78, 0x8148DA7C]
+f_furniture.c:
+    .text: [0x8062E96C, 0x80641254]
+    .rodata: [0x8064D360, 0x8064D4D0]
+    .data: [0x806D4D40, 0x806E02A0]
 ac_weather_fine.c:
     .data: [0x806D1DA0, 0x806D1DB8]
+
 
 # dataobject.obj files
 data/combi/data_combi.c:
