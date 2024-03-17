@@ -2,3 +2,4 @@ custom_tus:
   - "src/m_item_data.c"
   - "src/m_item_generator.c"
   - "src/ac_design.c"
+  - "src/data/field/bg/flower/obj_flower_rose.c"

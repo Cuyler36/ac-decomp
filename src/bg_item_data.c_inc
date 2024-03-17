@@ -239,6 +239,10 @@ static bg_item_type_data_c typeData_table_bgItem2[] = {
     { 0, bIT_DRAW_TYPE_GOLD_TREE004, pos_table, pos_table },      // 0x0867
     { 0, bIT_DRAW_TYPE_GOLD_TREE004, pos_table, pos_table },      // 0x0868
     { 0, bIT_DRAW_TYPE_GOLD_TREE000_DEAD, pos_table, pos_table }, // 0x0869
+    { 0, bIT_DRAW_TYPE_ROSE_RED, pos_table, pos_table },          // 0x086A
+    { 0, bIT_DRAW_TYPE_ROSE_WHITE, pos_table, pos_table },        // 0x086B
+    { 0, bIT_DRAW_TYPE_ROSE_YELLOW, pos_table, pos_table },       // 0x086C
+    { 0, bIT_DRAW_TYPE_ROSE_BLUE, pos_table, pos_table },         // 0x086D
 };
 
 static bg_item_type_data_c typeData_table_dummy[] = {
@@ -1402,6 +1406,66 @@ static bg_item_draw_part_c flower_part01 = {
 
 static bg_item_draw_part_c flower_part02 = {
     flower_DL_table, 1, flower_list_table02, 0, NULL, 0.0f, NULL, NULL,
+};
+
+extern Gfx obj_flower_rose_leavesT_mat_model[];
+extern Gfx obj_flower_rose_redT_mat_model[];
+extern Gfx obj_flower_rose_whiteT_mat_model[];
+extern Gfx obj_flower_rose_yellowT_mat_model[];
+extern Gfx obj_flower_rose_blueT_mat_model[];
+extern Gfx obj_flower_rose_leavesT_gfx_model[];
+extern Gfx obj_flower_roseT_gfx_model[];
+
+static Gfx* rose_DL_table[] = {
+    obj_flower_rose_leavesT_mat_model, obj_flower_rose_leavesT_gfx_model, obj_flower_rose_redT_mat_model,
+    obj_flower_roseT_gfx_model,        obj_flower_rose_whiteT_mat_model,  obj_flower_rose_yellowT_mat_model,
+    obj_flower_rose_blueT_mat_model,
+};
+
+static bg_item_draw_list_c rose_leaves_list = { &bg_item_common_draw_loop_type1, 0, 1 };
+
+static bg_item_draw_list_c rose_red_list = { &bg_item_common_draw_loop_type1, 2, 3 };
+
+static bg_item_draw_list_c* rose_red_list_table[] = {
+    &rose_leaves_list,
+    &rose_red_list,
+};
+
+static bg_item_draw_part_c rose_red_part = {
+    rose_DL_table, ARRAY_COUNT(rose_red_list_table), rose_red_list_table, 0, NULL, 0.0f, NULL, NULL,
+};
+
+static bg_item_draw_list_c rose_white_list = { &bg_item_common_draw_loop_type1, 4, 3 };
+
+static bg_item_draw_list_c* rose_white_list_table[] = {
+    &rose_leaves_list,
+    &rose_white_list,
+};
+
+static bg_item_draw_part_c rose_white_part = {
+    rose_DL_table, ARRAY_COUNT(rose_white_list_table), rose_white_list_table, 0, NULL, 0.0f, NULL, NULL,
+};
+
+static bg_item_draw_list_c rose_yellow_list = { &bg_item_common_draw_loop_type1, 5, 3 };
+
+static bg_item_draw_list_c* rose_yellow_list_table[] = {
+    &rose_leaves_list,
+    &rose_yellow_list,
+};
+
+static bg_item_draw_part_c rose_yellow_part = {
+    rose_DL_table, ARRAY_COUNT(rose_yellow_list_table), rose_yellow_list_table, 0, NULL, 0.0f, NULL, NULL,
+};
+
+static bg_item_draw_list_c rose_blue_list = { &bg_item_common_draw_loop_type1, 6, 3 };
+
+static bg_item_draw_list_c* rose_blue_list_table[] = {
+    &rose_leaves_list,
+    &rose_blue_list,
+};
+
+static bg_item_draw_part_c rose_blue_part = {
+    rose_DL_table, ARRAY_COUNT(rose_blue_list_table), rose_blue_list_table, 0, NULL, 0.0f, NULL, NULL,
 };
 
 extern Gfx obj_zassou_aT_mat_model[];
@@ -2692,6 +2756,10 @@ static bg_item_draw_part_table_c draw_part_table_a[] = {
     { &bone_part, 1 },               // bIT_DRAW_TYPE_BONE
     { &diary_part, 1 },              // bIT_DRAW_TYPE_DIARY
     { &fork_part, 1 },               // bIT_DRAW_TYPE_FORK
+    { &rose_red_part, 0 },           // bIT_DRAW_TYPE_ROSE_RED
+    { &rose_white_part, 0 },         // bIT_DRAW_TYPE_ROSE_WHITE
+    { &rose_yellow_part, 0 },        // bIT_DRAW_TYPE_ROSE_YELLOW
+    { &rose_blue_part, 0 },          // bIT_DRAW_TYPE_ROSE_BLUE
     { &fish_part, 0 },               // bIT_DRAW_TYPE_FISH2
     { NULL, 0 },                     // bIT_DRAW_TYPE_NONE
 };
