@@ -1100,7 +1100,7 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define FTR_CLOTH_MANNIQUIN254_WEST 0x1BA7
 #define FTR_CLOTH_END FTR_CLOTH_MANNIQUIN254_WEST
 #define FTR_CLOTH_MANNIQUIN_MY_ORIGINAL0 0x1BA8
-
+#define FTR_CLOTH_MYMANNIQUIN_END 0x1BC7
 #define FTR_INSECT_START 0x1BC8
 #define FTR_INSECT00 FTR_INSECT_START
 
@@ -2253,6 +2253,7 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define ETC_START 0x8000
 #define ETC_AIRPLANE ETC_START
 #define ETC_BALL (ETC_START + 1)
+#define ETC_MY_ROOM (ETC_START + 2)
 #define ETC_MBG (ETC_START + 3)
 #define ETC_BOXTRICK (ETC_START + 4)
 #define ETC_BOXMANAGER (ETC_START + 5)
@@ -2742,15 +2743,21 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define DUMMY_HOUSE1 0xF0F4
 #define DUMMY_HOUSE2 0xF0F5
 #define DUMMY_HOUSE3 0xF0F6
+#define DUMMY_SHOP0 0xF0F7
 #define DUMMY_HANIWA0 0xF0FB
 #define DUMMY_HANIWA1 (DUMMY_HANIWA0 + 1)
 #define DUMMY_HANIWA2 (DUMMY_HANIWA1 + 1)
 #define DUMMY_HANIWA3 (DUMMY_HANIWA2 + 1)
+#define DUMMY_POST_OFFICE 0xF0FF
 #define DUMMY_NEEDLEWORK_SHOP 0xF0FF
+#define DUMMY_POLICE_STATION 0xF101
 #define DUMMY_RESERVE 0xF102
 #define DUMMY_SHRINE 0xF103
 #define DUMMY_BROKER_SHOP 0xF104
+#define DUMMY_BUGGY 0xF105
 #define DUMMY_CAR 0xF106
+#define DUMMY_KAMAKURA 0xF107
+#define DUMMY_GOZA 0xF108
 #define DUMMY_RADIO 0xF109
 #define DUMMY_YATAI 0xF10A
 #define DUMMY_TUKIMI 0xF10A
@@ -2761,7 +2768,10 @@ extern int mNT_check_unknown(mActor_name_t item_no);
 #define DUMMY_LOTUS 0xF11B
 #define DUMMY_DOUZOU 0xF11D
 #define DUMMY_NAMEPLATE 0xF11F
+#define DUMMY_MUSEUM 0xF120
 #define DUMMY_FLAG 0xF122
+#define DUMMY_COTTAGE_MY 0xF123
+#define DUMMY_COTTAGE_NPC 0xF124
 #define DUMMY_TENT 0xF127
 #define DUMMY_BOAT 0xF128
 #define RSV_POLICE_ITEM_0 0xF128 // why is this duplicated?
