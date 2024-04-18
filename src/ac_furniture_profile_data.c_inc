@@ -1264,5 +1264,6 @@ static aFTR_PROFILE* furniture_quality[] = {
     &iam_nog_gong,
     &iam_tak_noise,
     &iam_tak_stew,
-    &iam_dummy,
+    &iam_ols_gc01, /* test by overwriting dummy */
+    //&iam_dummy,
 };

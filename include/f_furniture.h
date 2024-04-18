@@ -705,6 +705,9 @@ extern aFTR_PROFILE iam_yos_turkey_mirror;
 extern aFTR_PROFILE iam_yos_turkey_watch;
 extern aFTR_PROFILE iam_yos_wheel;
 
+/* Custom */
+extern aFTR_PROFILE iam_ols_gc01; // indigo gamecube
+
 #ifdef __cplusplus
 }
 #endif

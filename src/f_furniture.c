@@ -17,126 +17,125 @@
 #ifndef __INTELLISENSE__
 /* Force assetrip to detect these assets. They're used in a .c_inc file. */
 FORCESTRIP static u16 __hack_pal0[] = {
-  #include "assets/int_nog_kamakura_off_pal.inc"
+#include "assets/int_nog_kamakura_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal1[] = {
-  #include "assets/int_nog_kamakura_on_pal.inc"
+#include "assets/int_nog_kamakura_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal2[] = {
-  #include "assets/int_nog_kouban_on_pal.inc"
+#include "assets/int_nog_kouban_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal3[] = {
-  #include "assets/int_nog_kouban_off_pal.inc"
+#include "assets/int_nog_kouban_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal4[] = {
-  #include "assets/int_nog_museum_off_pal.inc"
+#include "assets/int_nog_museum_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal5[] = {
-  #include "assets/int_nog_museum_on_pal.inc"
+#include "assets/int_nog_museum_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal6[] = {
-  #include "assets/int_nog_station1_a_pal.inc"
+#include "assets/int_nog_station1_a_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal7[] = {
-  #include "assets/int_nog_station1_b_pal.inc"
+#include "assets/int_nog_station1_b_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal8[] = {
-  #include "assets/int_nog_station1_c_pal.inc"
+#include "assets/int_nog_station1_c_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal9[] = {
-  #include "assets/int_nog_station1_d_pal.inc"
+#include "assets/int_nog_station1_d_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal10[] = {
-  #include "assets/int_nog_station1_e_pal.inc"
+#include "assets/int_nog_station1_e_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal11[] = {
-  #include "assets/int_nog_station2_a_pal.inc"
+#include "assets/int_nog_station2_a_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal12[] = {
-  #include "assets/int_nog_station2_b_pal.inc"
+#include "assets/int_nog_station2_b_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal13[] = {
-  #include "assets/int_nog_station2_c_pal.inc"
+#include "assets/int_nog_station2_c_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal14[] = {
-  #include "assets/int_nog_station2_d_pal.inc"
+#include "assets/int_nog_station2_d_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal15[] = {
-  #include "assets/int_nog_station2_e_pal.inc"
+#include "assets/int_nog_station2_e_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal16[] = {
-  #include "assets/int_nog_station3_a_pal.inc"
+#include "assets/int_nog_station3_a_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal17[] = {
-  #include "assets/int_nog_station3_b_pal.inc"
+#include "assets/int_nog_station3_b_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal18[] = {
-  #include "assets/int_nog_station3_c_pal.inc"
+#include "assets/int_nog_station3_c_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal19[] = {
-  #include "assets/int_nog_station3_d_pal.inc"
+#include "assets/int_nog_station3_d_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal20[] = {
-  #include "assets/int_nog_station3_e_pal.inc"
+#include "assets/int_nog_station3_e_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal21[] = {
-  #include "assets/int_nog_shop1_off_pal.inc"
+#include "assets/int_nog_shop1_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal22[] = {
-  #include "assets/int_nog_shop1_on_pal.inc"
+#include "assets/int_nog_shop1_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal23[] = {
-  #include "assets/int_nog_uranai_off_pal.inc"
+#include "assets/int_nog_uranai_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal24[] = {
-  #include "assets/int_nog_uranai_on_pal.inc"
+#include "assets/int_nog_uranai_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal25[] = {
-  #include "assets/int_nog_yamishop_off_pal.inc"
+#include "assets/int_nog_yamishop_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal26[] = {
-  #include "assets/int_nog_yamishop_on_pal.inc"
+#include "assets/int_nog_yamishop_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal27[] = {
-  #include "assets/int_nog_yubin_on_pal.inc"
+#include "assets/int_nog_yubin_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal28[] = {
-  #include "assets/int_nog_yubin_off_pal.inc"
+#include "assets/int_nog_yubin_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal29[] = {
-  #include "assets/int_tak_tailor_on_pal.inc"
+#include "assets/int_tak_tailor_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal30[] = {
-  #include "assets/int_tak_tailor_off_pal.inc"
+#include "assets/int_tak_tailor_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal31[] = {
-  #include "assets/radio_pal.inc"
+#include "assets/radio_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal32[] = {
-  #include "assets/int_yaz_fish_trophy_pal.inc"
+#include "assets/int_yaz_fish_trophy_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal33[] = {
-  #include "assets/int_tak_tent_on_pal.inc"
+#include "assets/int_tak_tent_on_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal34[] = {
-  #include "assets/int_tak_tent_off_pal.inc"
+#include "assets/int_tak_tent_off_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal35[] = {
-  #include "assets/int_yaz_fish_trophy2_pal.inc"
+#include "assets/int_yaz_fish_trophy2_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal36[] = {
-  #include "assets/int_nog_flower_a_pal.inc"
+#include "assets/int_nog_flower_a_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal37[] = {
-  #include "assets/int_nog_flower_b_pal.inc"
+#include "assets/int_nog_flower_b_pal.inc"
 };
 FORCESTRIP static u16 __hack_pal38[] = {
-  #include "assets/int_nog_flower_c_pal.inc"
+#include "assets/int_nog_flower_c_pal.inc"
 };
 
 #endif
 #endif
-
 
 static u16 fFTR_myhome_off_pal_table[][16] ATTRIBUTE_ALIGN(32) = {
     // clang-format off
@@ -962,3 +961,6 @@ static Gfx* fFTR_GetTwoTileGfx(int width0, int height0, int scroll_x0, int scrol
 #include "../src/ftr/ac_nog_lawnmower.c"
 #include "../src/ftr/ac_nog_sprinkler.c"
 #include "../src/ftr/ac_dummy.c"
+
+/* Custom */
+#include "../src/ftr/ac_ols_gc01.c" // indigo gamecube
