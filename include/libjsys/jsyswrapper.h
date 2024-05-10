@@ -142,6 +142,10 @@ extern void JW_JUTReport(int x, int y, int show_count, const char* fmt, ...);
 extern int JC_JKRDecomp_checkCompressed(u8* bufp);
 extern void JC_JKRDecomp_decode(u8* comp_bufp, u8* decomp_bufp, u32 decomp_buf_size, u32 skipCount);
 
+extern void* JC__JKRAllocFromAram(u32 size);
+extern void* JC__JKRMainRamToAram_block(void* mram_src, void* aram_block, u32 size);
+extern void* JC__JKRAramToMainRam_block(void* aram_block, void* mram_dst, u32 size);
+
 extern void* JC__JKRMountArchive(const char* path, int mount_mode, void* heap, int mount_direction);
 
 extern void* JC__JKRGetSystemHeap();

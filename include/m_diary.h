@@ -12,15 +12,16 @@ extern "C" {
 #define mDI_ENTRY_SIZE 992
 
 typedef struct diary_entry_s {
-  u8 text[mDI_ENTRY_SIZE];
+    u8 text[mDI_ENTRY_SIZE];
 } mDi_entry_c;
 
 typedef struct diary_data_s {
-  u16 checksum;
-  mDi_entry_c entries[PLAYER_NUM][lbRTC_MONTHS_MAX];
+    u16 checksum;
+    mDi_entry_c entries[PLAYER_NUM][lbRTC_MONTHS_MAX];
 } mDi_data_c;
 
 extern int mDi_strlen(u8* str, int max_len, u8 end_char);
+extern void mDi_init_diary(mDi_entry_c* entry);
 
 #ifdef __cplusplus
 }

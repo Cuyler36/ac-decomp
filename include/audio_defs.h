@@ -48,7 +48,9 @@ typedef enum audio_sound_effects {
     NA_SE_MONEY2,
     NA_SE_COIN,
 
+    NA_SE_51 = 0x51,
     NA_SE_52 = 0x52,
+    NA_SE_TOWN_DELETE = 0x53,
 
     NA_SE_BIRTH_FTR = 0x57,
     NA_SE_CLEAN_UP_FTR = 0x58,
