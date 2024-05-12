@@ -6,6 +6,7 @@
 #include "m_rcp.h"
 #include "libultra/libultra.h"
 #include "sys_matrix.h"
+#include "m_rcp.h"
 
 static void mSM_setup_view(Submenu* submenu, GRAPH* graph, int init_flag) {
     Gfx* gfx;
@@ -44,15 +45,16 @@ static void mSM_setup_view(Submenu* submenu, GRAPH* graph, int init_flag) {
 
 static void mSM_change_view(GRAPH* graph, s16 angle, int width, int height, f32 eye_dist, f32 y_lookAt, f32 vp_x,
                             f32 vp_y) {
-    static Vp viewport_data = { { 0, 0, 511, 0 }, { 0, 0, 511, 0 } };
+    static Vp viewport_data = { 0, 0, 511, 0, 0, 0, 511, 0 };
 
     static Lights0 light_data = {
-        { { 105, 90, 90 }, 0, { 105, 90, 90 }, 0 },                          // Ambient
-        { { { 255, 255, 245 }, 0, { 255, 255, 245 }, 0, { 0, 60, 60 }, 0 } } // Light
+        { 105, 90, 90, 0, 105, 90, 90, 0 },                      // Ambient
+        { { 255, 255, 245, 0, 255, 255, 245, 0, 0, 60, 60, 0 } } // Light
     };
 
     Vp* viewport = GRAPH_ALLOC_TYPE(graph, Vp, 1);
-    Mtx* mtx = GRAPH_ALLOC_TYPE(graph, mtx, 1);
+    Mtx* mtx = GRAPH_ALLOC_TYPE(graph, Mtx, 1);
+    Mtx* view_mtx = GRAPH_ALLOC_TYPE(graph, Mtx, 1);
     u16 persp_norm;
     f32 y_eye;
     f32 z_eye;
@@ -61,16 +63,16 @@ static void mSM_change_view(GRAPH* graph, s16 angle, int width, int height, f32 
         viewport = &viewport_data;
     } else {
         viewport->vp.vscale[0] = width << 1;
-        viewport->vp.vtrans[0] = (width << 1) + (s16)vp_x;
+        viewport->vp.vtrans[0] = (width << 1) + (s16)(int)vp_x;
 
         viewport->vp.vscale[1] = height << 1;
-        viewport->vp.vtrans[1] = (height << 1) + (s16)vp_y;
+        viewport->vp.vtrans[1] = (height << 1) + (s16)(int)vp_y;
 
-        viewport->vp.vscale[2] = 511;
         viewport->vp.vtrans[2] = 511;
+        viewport->vp.vscale[2] = 511;
 
-        viewport->vp.vscale[3] = 0;
         viewport->vp.vtrans[3] = 0;
+        viewport->vp.vscale[3] = 0;
     }
 
     OPEN_DISP(graph);
@@ -101,15 +103,15 @@ static void mSM_change_view(GRAPH* graph, s16 angle, int width, int height, f32 
     y_eye = y_lookAt + eye_dist * sin_s(angle);
     z_eye = eye_dist * cos_s(angle);
 
-    if (angle < DEG2SHORT_ANGLE(-90.0f) || angle > DEG2SHORT_ANGLE(90.0f)) {
-        guLookAt(mtx, 0.0f, y_eye, z_eye, 0.0f, y_lookAt, 0.0f, 0.0f, -1.0f, 0.0f);
+    if (angle < DEG2SHORT_ANGLE(-90.0f) || angle >= DEG2SHORT_ANGLE(90.0f)) {
+        guLookAt(view_mtx, 0.0f, y_eye, z_eye, 0.0f, y_lookAt, 0.0f, 0.0f, -1.0f, 0.0f);
     } else {
-        guLookAt(mtx, 0.0f, y_eye, z_eye, 0.0f, y_lookAt, 0.0f, 0.0f, 1.0f, 0.0f);
+        guLookAt(view_mtx, 0.0f, y_eye, z_eye, 0.0f, y_lookAt, 0.0f, 0.0f, 1.0f, 0.0f);
     }
 
     OPEN_DISP(graph);
 
-    gSPMatrix(NOW_POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+    gSPMatrix(NOW_POLY_OPA_DISP++, view_mtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     gSPSetLights0(NOW_POLY_OPA_DISP++, light_data);
     SET_POLY_OPA_DISP(gfx_set_fog_nosync(NOW_POLY_OPA_DISP++, 255, 255, 255, 255, 1000, 1000));
 

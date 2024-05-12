@@ -28,6 +28,8 @@ f32 game_GameFrameF;
 f32 game_GameFrame_2F;
 f32 game_GameFrame__1F;
 
+int g_game_WidescreenEnabled = FALSE;
+
 GAME* game_class_p;
 
 static void game_move_first(GAME* this) {

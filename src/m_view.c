@@ -21,8 +21,6 @@ static void set_viewport(Vp* viewport, rect* screen_rect) {
     viewport->vp.vtrans[3] = 0;
 }
 
-#define WIDESCREEN
-
 extern void initView(View* view, GRAPH* graph) {
     view->graph = graph;
 
@@ -239,13 +237,13 @@ extern int showPerspectiveView(View* view) {
     /* update perspective matrix */
     mtx = GRAPH_ALLOC_TYPE(g, Mtx, 1);
     view->p_projection = mtx;
-#ifndef WIDESCREEN
-    guPerspective(mtx, &view->normal, view->fovY,
-                  (f32)(view->screen.r - view->screen.l) / (f32)(view->screen.bottom - view->screen.top), view->near,
-                  view->far, view->scale);
-#else
-    guPerspective(mtx, &view->normal, view->fovY, 16.0f / 9.0f, view->near, view->far, view->scale);
-#endif
+    if (!g_game_WidescreenEnabled) {
+        guPerspective(mtx, &view->normal, view->fovY,
+                      (f32)(view->screen.r - view->screen.l) / (f32)(view->screen.bottom - view->screen.top),
+                      view->near, view->far, view->scale);
+    } else {
+        guPerspective(mtx, &view->normal, view->fovY, 16.0f / 9.0f, view->near, view->far, view->scale);
+    }
 
     view->mtx_projection = *mtx;
 
