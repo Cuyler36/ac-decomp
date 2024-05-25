@@ -251,13 +251,16 @@ struct private_s {
     /* 0x122C */ u32 bank_account;                                        /* probably 'deposit' interally */
     /* 0x1240 */ mNW_original_design_c my_org[mPr_ORIGINAL_DESIGN_COUNT]; /* Able Sisters' designs */
     /* 0x2340 */ u8 my_org_no_table[mPr_ORIGINAL_DESIGN_COUNT];           /* order of designs */
-    /* 0x2348 */ u32 state_flags;                    /* TODO: this might be a bitfield/struct, also document bits */
-    /* 0x234C */ mCD_player_calendar_c calendar;     /* player calendar data */
-    /* 0x23B4 */ u32 soncho_trophy_field0;           /* first 28 tortimer event flags */
-    /* 0x23B8 */ mPr_day_day_c nw_visitor;           /* info for how many unique days the player has talked to Sable */
-    /* 0x23BE */ mPr_day_day_c radiocard;            /* radio stamp days */
-    /* 0x23C4 */ mPr_sunburn_c sunburn;              /* sunburn state */
-    /* 0x23CA */ u8 unused_23CA[14];                 /* seemingly unused data */
+    /* 0x2348 */ u32 state_flags;                /* TODO: this might be a bitfield/struct, also document bits */
+    /* 0x234C */ mCD_player_calendar_c calendar; /* player calendar data */
+    /* 0x23B4 */ u32 soncho_trophy_field0;       /* first 28 tortimer event flags */
+    /* 0x23B8 */ mPr_day_day_c nw_visitor;       /* info for how many unique days the player has talked to Sable */
+    /* 0x23BE */ mPr_day_day_c radiocard;        /* radio stamp days */
+    /* 0x23C4 */ mPr_sunburn_c sunburn;          /* sunburn state */
+    // /* 0x23CA */ u8 unused_23CA[14];                 /* seemingly unused data */
+    /* 0x23CA */ u8 _pad[2];
+    /* 0x23CC */ u32 town_tickets;
+    /* 0x23D0 */ u8 town_tickets_rsv[8];
     /* 0x23D8 */ mActor_name_t birthday_present_npc; /* npc id of the 'best friend' villger who will gift the player a
                                                         present on their birthday (at the door) */
     /* 0x23DA */ u8 golden_items_collected;          /* bitfield tracking which golden items the player has received */

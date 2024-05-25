@@ -37,6 +37,7 @@
 #include "m_scene_table.h"
 #include "m_player_lib.h"
 #include "m_skin_matrix.h"
+#include "m_town_tickets.h"
 
 u16 S_back_title_timer;
 u16 S_se_endcheck_timeout;
@@ -602,6 +603,7 @@ void Game_play_move(GAME_PLAY* play) {
     watch_my_step_move(play);
     play->game.doing_point = 4;
     banti_move(play);
+    tickets_move(play);
     play->game.doing_point = 5;
     title_demo_move(play);
     play->game.doing_point = 0;
@@ -793,9 +795,9 @@ void Game_play_draw(GAME* game) {
         setupViewMatrix(play, graph, graph);
 
         if ((makeBumpTexture(play, graph, graph) == 1) && ((GETREG(HREG, 80) != 10) || (GETREG(HREG, 89) != 0))) {
-
             watch_my_step_draw(play);
             banti_draw(play);
+            tickets_draw(play);
             mSM_submenu_draw(&play->submenu, (GAME*)play);
         }
     }
