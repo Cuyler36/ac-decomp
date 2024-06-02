@@ -1174,6 +1174,8 @@ data/field/bg/flower/obj_flower_leaf.c:
     .data: [0x807508C0, 0x80751140]
 data/combi/data_combi.c:
     .data: [0x8080DD80, 0x8080E628]
+data/font/font_main.c:
+    .data: [0x80851C00, 0x80857C00]
 data/item/item_name.c:
     .data: [0x808BF660, 0x808C8830]
 data/model/mural/obj_mural.c:

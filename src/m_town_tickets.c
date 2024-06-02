@@ -21,6 +21,81 @@ static int timer = 0;
 static int last_addressable_type = 0;
 static BOOL disabled = FALSE;
 
+static mTT_task_c tasks[mTT_TASK_NUM];
+
+extern void mTT_disable(void) {
+    disabled = TRUE;
+}
+
+extern void mTT_enable(void) {
+    disabled = FALSE;
+}
+
+extern BOOL mTT_isDisabled(void) {
+    return disabled;
+}
+
+extern mTT_task_c* mTT_getTask(int idx) {
+    if (idx < 0 || idx >= mTT_TASK_NUM) {
+        return NULL;
+    }
+
+    return &tasks[idx];
+}
+
+static void mTT_clearTask(mTT_task_c* const task) {
+    task->type = mTT_TASK_TYPE_NONE;
+    task->ticket_count = 0;
+    task->progress = 0;
+    task->target_progress = 0;
+    task->state = mTT_STATE_IN_PROGRESS;
+}
+
+extern BOOL mTT_isTaskComplete(int idx) {
+    const mTT_task_c* const task = mTT_getTask(idx);
+
+    if (task != NULL) {
+        return task->state == mTT_STATE_COMPLETED;
+    }
+
+    return FALSE;
+}
+
+extern BOOL mTT_checkUpdateTaskComplete(int idx) {
+    mTT_task_c* const task = mTT_getTask(idx);
+
+    if (task != NULL) {
+        if (task->state == mTT_STATE_IN_PROGRESS && task->progress >= task->target_progress) {
+            task->state = mTT_STATE_COMPLETED;
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+extern void mTT_incrementTaskState(int type, int progress) {
+    int i;
+
+    for (i = 0; i < mTT_TASK_NUM; i++) {
+        if (tasks[i].type == type && tasks[i].state == mTT_STATE_IN_PROGRESS) {
+            tasks[i].progress += progress;
+            mTT_checkUpdateTaskComplete(i);
+        }
+    }
+}
+
+extern void mTT_checkCompletedTasks(void) {
+    int i;
+
+    for (i = 0; i < mTT_TASK_NUM; i++) {
+        if (tasks[i].type != mTT_TASK_TYPE_NONE && tasks[i].state == mTT_STATE_COMPLETED) {
+            Now_Private->town_tickets = MIN(Now_Private->town_tickets + tasks[i].ticket_count, mTT_MAX_TICKETS);
+            mTT_clearTask(&tasks[i]);
+        }
+    }
+}
+
 static f32 tickets_calc_disp_alpha_rate(GAME_PLAY* play) {
     if (mDemo_CheckDemo() || mEv_CheckTitleDemo() > 0 || disabled) {
         last_addressable_type = mPlayer_ADDRESSABLE_FALSE_MOVEMENT;

@@ -353,6 +353,10 @@ config/rel.yml:
     addrs: [0x807510C0, 0x80751100]
     type: vtx
 
+  # font
+  FONT_nes_tex_font1:
+    addrs: [0x80851C00, 0x80857C00]
+
   # dataobj.obj item names
   itemName_paper:
     addrs: [0x808BF660, 0x808C0660]

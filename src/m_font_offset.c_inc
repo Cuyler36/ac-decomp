@@ -1,13 +1,13 @@
-static int mFont_Get_FontOffset(u8 c) {
-  static u8 offset_data[256] = {
+// clang-format off
+static u8 offset_data[256] = {
     6, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6,
     6, 4, 4, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5,
-    7, 6, 5, 5, 5, 1, 4, 8, 6, 6, 1, 0, 8, 4, 8, 0,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 1, 4, 3, 4, 4,
-    2, 3, 5, 4, 4, 5, 5, 4, 4, 6, 6, 5, 5, 2, 4, 4,
-    5, 3, 5, 5, 5, 4, 4, 2, 5, 5, 6, 5, 0, 5, 5, 3,
-    5, 5, 5, 5, 5, 6, 7, 5, 4, 7, 7, 6, 7, 3, 5, 5,
-    5, 4, 6, 6, 7, 5, 6, 3, 6, 6, 7, 5, 5, 5, 5, 0,
+    7, 8, 6, 5, 5, 1, 4, 9, 6, 6, 1, 0, 9, 5, 9, 0,
+    4, 6, 5, 5, 5, 5, 5, 5, 5, 5, 9, 1, 4, 3, 4, 5,
+    2, 4, 5, 4, 4, 5, 6, 4, 4, 7, 6, 5, 5, 3, 5, 4,
+    5, 4, 5, 5, 5, 4, 4, 2, 5, 5, 6, 5, 0, 5, 5, 3,
+    5, 5, 5, 6, 5, 6, 7, 5, 5, 8, 8, 6, 8, 3, 5, 5,
+    5, 5, 6, 6, 7, 5, 6, 3, 6, 6, 7, 5, 5, 5, 5, 0,
     0, 6, 6, 6, 6, 8, 4, 5, 5, 5, 5, 5, 5, 3, 5, 5,
     0, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 4, 5, 6, 6, 6,
     3, 4, 2, 3, 5, 2, 2, 0, 0, 0, 0, 0, 5, 5, 5, 0,
@@ -16,7 +16,41 @@ static int mFont_Get_FontOffset(u8 c) {
     8, 3, 8, 6, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
-  };
+};
+// clang-format on
 
-  return offset_data[c];
+static int debug_idx = 0;
+
+extern void mFont_Debug_ChangeOffset(int amount) {
+    debug_idx += amount;
+
+    if (debug_idx < 0) {
+        debug_idx = 0;
+    } else if (debug_idx > 255) {
+        debug_idx = 255;
+    }
+}
+
+extern void mFont_Debug_AdjustFontOffset(int amount) {
+    if (amount < 0) {
+        if ((offset_data[debug_idx] + amount) >= 0) {
+            offset_data[debug_idx] += amount;
+        } else {
+            offset_data[debug_idx] = 0;
+        }
+    } else {
+        if ((offset_data[debug_idx] + amount) <= 255) {
+            offset_data[debug_idx] += amount;
+        } else {
+            offset_data[debug_idx] = 255;
+        }
+    }
+}
+
+extern int mFont_Debug_GetIdx(void) {
+    return debug_idx;
+}
+
+extern int mFont_Get_FontOffset(u8 c) {
+    return offset_data[c];
 }

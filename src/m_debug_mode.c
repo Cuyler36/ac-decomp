@@ -28,6 +28,7 @@
 #include "boot.h"
 #include "m_common_data.h"
 #include "m_town_tickets.h"
+#include "m_font.h"
 
 #define DEBUG_MODE_PRINT_BUF_COUNT 6
 #define DEBUG_MODE_PRINT_OUTPUT_X 26
@@ -492,16 +493,28 @@ extern void Debug_mode_input(pad_t* pad) {
             field_assessment_status ^= 1;
         }
     }
+
+    if (chkButton(BUTTON_Z)) {
+        if (chkTrigger(BUTTON_L)) {
+            mFont_Debug_ChangeOffset(-1);
+        } else if (chkTrigger(BUTTON_R)) {
+            mFont_Debug_ChangeOffset(1);
+        } else if (chkTrigger(BUTTON_X)) {
+            mFont_Debug_AdjustFontOffset(-1);
+        } else if (chkTrigger(BUTTON_Y)) {
+            mFont_Debug_AdjustFontOffset(1);
+        }
+    }
 }
 
 static void Debug_mode_output_sub(gfxprint_t* gfxprint) {
     static u8 reg_name_data[] = " SOPQMYDUIZCNKXcsiWAVHGmnBdkb*********";
-    static char* long_reg_name_data[] = { "REG",    "SREG",      "OREG",    "PREG",   "QREG",   "MREG",   "SBREG",
-                                          "DREG",   "UREG",      "IREG",    "ZREG",   "CRV",    "NS1",    "SND",
-                                          "XREG",   "CRV2",      "DEMOREG", "TREG",   "WREG",   "AREG",   "VREG",
-                                          "HREG",   "GREG",      "mREG",    "nREG",   "BREG",   "DORO",   "kREG",
-                                          "BAK",    "PLAYERREG", "NMREG",   "NIIREG", "GENREG", "MYKREG", "CAMREG",
-                                          "SAKREG", "TAKREG",    "PL2REG" };
+    static char* long_reg_name_data[] = {
+        "REG",   "SREG",   "OREG",   "PREG",   "QREG",   "MREG",   "SBREG",   "DREG",   "UREG", "IREG",
+        "ZREG",  "CRV",    "NS1",    "SND",    "XREG",   "CRV2",   "DEMOREG", "TREG",   "WREG", "AREG",
+        "VREG",  "HREG",   "GREG",   "mREG",   "nREG",   "BREG",   "DORO",    "kREG",   "BAK",  "PLAYERREG",
+        "NMREG", "NIIREG", "GENREG", "MYKREG", "CAMREG", "SAKREG", "TAKREG",  "PL2REG",
+    };
 
     int i;
     int mode;
@@ -700,6 +713,10 @@ extern void Debug_mode_output(GRAPH* graph) {
         }
 
         tickets_debug(print_p);
+
+        gfxprint_locate8x8(print_p, 2, 10);
+        gfxprint_color(print_p, 255, 255, 255, 255);
+        gfxprint_printf(print_p, "FONT %02X: %d", mFont_Debug_GetIdx(), mFont_Get_FontOffset(mFont_Debug_GetIdx()));
 
         last_gfx = gfxprint_close(print_p);
         gSPEndDisplayList(last_gfx++);
