@@ -206,6 +206,21 @@ static void aAp_StartFlyMove(ACTOR* actor, GAME* game) {
         airplane->rotZ = 0.0f;
         airplane->y_speed = 0.0f;
 
+        /* @BUGFIX - Player_actor_setup_main_Base2 creates a bug where requested_main_index_changed is cleared,
+           but requested_main_index_priority is left at its prior value. When Player_actor_check_request_main_priority
+           is called, it doesn't check for requested_main_index_changed flag so this stale priority blocks releasing
+           the lock on the player's input.
+
+           We fix this by checking if the current main index is 'refuse' and, if so, we manually clear the
+           requested main index priority value before calling request_main_wait_type3.
+        */
+        if (mPlib_get_player_actor_main_index(game) == mPlayer_INDEX_REFUSE) {
+            PLAYER_ACTOR* player = GET_PLAYER_ACTOR((GAME_PLAY*)game);
+            if (player != NULL) {
+                player->requested_main_index_priority = -1;
+            }
+        }
+
         mPlib_request_main_wait_type3((GAME*)play);
     }
 }
@@ -340,6 +355,21 @@ static void aAp_ZbuttonChangeStatus(AIRPLANE_ACTOR* actor, GAME* game) {
             actor->status = aAp_STATUS_START_FLY_MOVE;
         }
     } else if (actor->status == aAp_STATUS_START_FLY_MOVE) {
+        /* @BUGFIX - Player_actor_setup_main_Base2 creates a bug where requested_main_index_changed is cleared,
+           but requested_main_index_priority is left at its prior value. When Player_actor_check_request_main_priority
+           is called, it doesn't check for requested_main_index_changed flag so this stale priority blocks releasing
+           the lock on the player's input.
+
+           We fix this by checking if the current main index is 'refuse' and, if so, we manually clear the
+           requested main index priority value before calling request_main_wait_type3.
+        */
+        if (mPlib_get_player_actor_main_index(game) == mPlayer_INDEX_REFUSE) {
+            PLAYER_ACTOR* player = GET_PLAYER_ACTOR((GAME_PLAY*)game);
+            if (player != NULL) {
+                player->requested_main_index_priority = -1;
+            }
+        }
+
         mPlib_request_main_wait_type3(game);
         actor->status = aAp_STATUS_PLAYER_CATCH;
     }
@@ -355,10 +385,10 @@ static f32 aAp_GetBgCheckOffsetY(s16 status) {
 
 typedef void (*AIRPLANE_ACTOR_MOVE_PROC)(ACTOR*, GAME*);
 static void Airplane_Actor_move(ACTOR* actor, GAME* game) {
-    static AIRPLANE_ACTOR_MOVE_PROC AirplaneMove[aAp_STATUS_NUM] = { &aAp_FreeFlyMove,  &aAp_FallFlyMove,
-                                                                     &aAp_FallFlyMove2, &aAp_SomerFlyMove,
-                                                                     &aAp_StartFlyMove, &aAp_StopFlyMove,
-                                                                     &aAp_PlayerCatch };
+    static AIRPLANE_ACTOR_MOVE_PROC AirplaneMove[aAp_STATUS_NUM] = {
+        &aAp_FreeFlyMove,  &aAp_FallFlyMove, &aAp_FallFlyMove2, &aAp_SomerFlyMove,
+        &aAp_StartFlyMove, &aAp_StopFlyMove, &aAp_PlayerCatch,
+    };
 
     AIRPLANE_ACTOR* airplane = (AIRPLANE_ACTOR*)actor;
     f32 offset_y;
