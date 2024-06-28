@@ -8,6 +8,7 @@
 #include "m_bgm.h"
 #include "m_player_lib.h"
 #include "m_house.h"
+#include "dolphin/os.h"
 
 enum {
     aID_ACT_FIRST_SET,
