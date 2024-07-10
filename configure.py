@@ -767,11 +767,17 @@ def make_objdiff_json(sources: List[Source]):
     with open("objdiff.json", 'w') as f:
         json.dump(data, f, indent=4)
 
+def load_custom_tus(sources: List[str], ctx: c.SourceContext, existing: List[Source]):
+    for source in sources:
+        existing.append(CSource(ctx, source))
+
 dol_sources = load_sources(c.DOL_CTX)
+load_custom_tus(c.load_from_yaml(f"{c.CONFIG}/dol_custom.yml")["custom_tus"], c.DOL_CTX, dol_sources)
 dol_gen_includes = find_gen_includes(dol_sources)
 make_asm_list(c.DOL_ASM_LIST, dol_gen_includes[AsmInclude])
 
 rel_sources = load_sources(c.REL_CTX)
+load_custom_tus(c.load_from_yaml(f"{c.CONFIG}/rel_custom.yml")["custom_tus"], c.REL_CTX, rel_sources)
 rel_gen_includes = find_gen_includes(rel_sources)
 make_asm_list(c.REL_ASM_LIST, rel_gen_includes[AsmInclude])
 

@@ -15,13 +15,13 @@ typedef void (*SICallback)(s32 chan, u32 sr, OSContext* context);
 typedef void (*SITypeAndStatusCallback)(s32 chan, u32 type);
 
 typedef struct SIPacket {
-  s32 chan;
-  void* output;
-  u32 outputBytes;
-  void* input;
-  u32 inputBytes;
-  SICallback callback;
-  OSTime fire;
+    s32 chan;
+    void* output;
+    u32 outputBytes;
+    void* input;
+    u32 inputBytes;
+    SICallback callback;
+    OSTime fire;
 } SIPacket;
 
 void SIInit(void);
@@ -30,8 +30,8 @@ u32 SIGetStatus(s32 chan);
 BOOL SIBusy(void);
 BOOL SIIsChanBusy(s32 chan);
 
-BOOL SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u32 inputBytes,
-                SICallback callback, OSTime delay);
+BOOL SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u32 inputBytes, SICallback callback,
+                OSTime delay);
 u32 SISync(void);
 
 void SISetCommand(s32 chan, u32 command);
@@ -48,6 +48,8 @@ BOOL SIUnregisterPollingHandler(OSInterruptHandler handler);
 u32 SIGetType(s32 chan);
 u32 SIGetTypeAsync(s32 chan, SITypeAndStatusCallback callback);
 u32 SIDecodeType(u32 type);
+
+#define SI_POLL_MASK(chan) (0x80000000 >> (chan))
 
 #ifdef __cplusplus
 }
