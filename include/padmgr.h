@@ -84,6 +84,10 @@ typedef struct {
     /* 0x0441 */ u8 device_type[MAXCONTROLLERS];
     /* 0x0445 */ u8 pak_type[MAXCONTROLLERS];
     /* 0x044A */ Rumble_t rumble;
+    /* 0x0460 */ u8 keyboard_keys[3];
+    /* 0x0463 */ u8 last_keys[3];
+    /* 0x0466 */ u8 trigger_keys[3];
+    /* 0x0469 */ u8 off_keys[3];
 } padmgr;
 
 extern padmgr padmgr_class;
@@ -96,6 +100,9 @@ extern void padmgr_Create(OSMessageQueue* queue, OSId id, OSPri priority, void* 
 extern void padmgr_Init(OSMessageQueue* queue);
 extern void padmgr_RequestPadData(pad_t* pad, int count);
 extern void padmgr_ClearPadData(pad_t* pad);
+extern const u8* padmgr_getPressedKeys(void);
+extern const u8* padmgr_getTriggerKeys(void);
+extern const u8* padmgr_getOffKeys(void);
 
 #define padmgr_setClient(callback_proc, param) \
     do {                                       \

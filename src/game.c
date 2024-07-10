@@ -104,9 +104,40 @@ extern void game_draw_last(GRAPH* graph) {
     CLOSE_DISP(graph);
 }
 
+#define GCKB_DEBUG_OUTPUT FALSE
+
 extern void game_get_controller(GAME* this) {
     if (this->pad_initialized == TRUE) {
         padmgr_RequestPadData(this->pads, 1);
+
+#if GCKB_DEBUG_OUTPUT != FALSE
+        {
+            gfxprint_t gfxprint;
+            Gfx* list;
+            Gfx* gfx_save;
+
+            gfxprint_init(&gfxprint);
+
+            OPEN_DISP(this->graph);
+
+            gfx_save = NOW_POLY_OPA_DISP;
+            list = gfxopen(gfx_save);
+
+            gSPDisplayList(NEXT_OVERLAY_DISP, list);
+            gfxprint_open(&gfxprint, list);
+            gfxprint_locate8x8(&gfxprint, 3, 3);
+            gfxprint_color(&gfxprint, 255, 255, 0, 255);
+            gfxprint_printf(&gfxprint, "GCKB: %02X %02X %02X", padmgr_class.keyboard_keys[0],
+                            padmgr_class.keyboard_keys[1], padmgr_class.keyboard_keys[2]);
+
+            list = gfxprint_close(&gfxprint);
+            gSPEndDisplayList(list++);
+            gfxclose(gfx_save, list);
+
+            SET_POLY_OPA_DISP(list);
+            CLOSE_DISP(this->graph);
+        }
+#endif
     } else {
         padmgr_ClearPadData(this->pads);
     }

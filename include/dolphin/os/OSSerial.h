@@ -53,10 +53,14 @@ extern "C" {
 #define SI_GBA (SI_TYPE_N64 | 0x00040000)
 #define SI_GC_CONTROLLER (SI_TYPE_GC | SI_GC_STANDARD)
 #define SI_GC_RECEIVER (SI_TYPE_GC | SI_GC_WIRELESS)
-#define SI_GC_WAVEBIRD                                                                             \
-  (SI_TYPE_GC | SI_GC_WIRELESS | SI_GC_STANDARD | SI_WIRELESS_STATE | SI_WIRELESS_FIX_ID)
+#define SI_GC_WAVEBIRD (SI_TYPE_GC | SI_GC_WIRELESS | SI_GC_STANDARD | SI_WIRELESS_STATE | SI_WIRELESS_FIX_ID)
 #define SI_GC_KEYBOARD (SI_TYPE_GC | 0x00200000)
 #define SI_GC_STEERING (SI_TYPE_GC | 0x00000000)
+
+#define SI_COMCSR_IDX 13
+#define SI_STATUS_IDX 14
+
+#define SI_COMCSR_TSTART_MASK (1 << 0)
 
 u32 SIProbe(s32 chan);
 char* SIGetTypeString(u32 type);

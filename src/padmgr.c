@@ -3,6 +3,10 @@
 #include "libultra/libultra.h"
 #include "m_debug.h"
 #include "jsyswrap.h"
+#include "gckeyboard/gc_keyboard.h"
+#include "dolphin/os.h"
+
+#include "libu64/gfxprint.h"
 
 static int frame = 0;
 padmgr padmgr_class;
@@ -302,9 +306,80 @@ extern void padmgr_RequestPadData_NonLock(pad_t* pad, int flag) {
 }
 
 extern void padmgr_RequestPadData(pad_t* pad, int flag) {
+    s32 keyboard_chan;
+    s32 idx;
+    s32 idx2;
+    s32 i;
+    s32 j;
+    s32 k;
+
     padmgr_LockContData();
     padmgr_RequestPadData_NonLock(pad, flag);
     padmgr_UnlockContData();
+
+    keyboard_chan = GCKB_GetCurrentChan();
+    if (keyboard_chan != -1) {
+        this->last_keys[0] = this->keyboard_keys[0];
+        this->last_keys[1] = this->keyboard_keys[1];
+        this->last_keys[2] = this->keyboard_keys[2];
+
+        if (GCKB_ReadKeys(keyboard_chan, this->keyboard_keys)) {
+            // OSReport("GCKB pressed keys: %02X,%02X,%02X\n", this->keyboard_keys[0], this->keyboard_keys[1],
+            //          this->keyboard_keys[2]);
+        } else {
+            this->keyboard_keys[0] = 0;
+            this->keyboard_keys[1] = 0;
+            this->keyboard_keys[2] = 0;
+            // OSReport("GCKB failed to read keys!");
+        }
+
+        idx = 0;
+        for (i = 0; i < 3; i++) {
+            if (this->keyboard_keys[i] == 0) {
+                continue;
+            }
+
+            for (j = 0; j < 3; j++) {
+                /* Same key was pressed on the last frame */
+                if (this->keyboard_keys[i] == this->last_keys[j]) {
+                    break;
+                }
+            }
+
+            if (j == 3) {
+                this->trigger_keys[idx++] = this->keyboard_keys[i];
+            }
+        }
+
+        /* Clear the other non-triggered keys */
+        for (i = idx; i < 3; i++) {
+            this->trigger_keys[i] = 0;
+        }
+
+        /* Set off keys */
+        idx2 = 0;
+        for (i = 0; i < 3; i++) {
+            if (this->last_keys[i] == 0) {
+                continue;
+            }
+
+            for (j = 0; j < 3; j++) {
+                /* If the last key equals a current key then that key was *NOT* released */
+                if (this->last_keys[i] == this->keyboard_keys[j]) {
+                    break;
+                }
+            }
+
+            /* Key wasn't in the currently pressed keys so it must've been released */
+            if (j == 3) {
+                this->off_keys[idx2++] = this->last_keys[i];
+            }
+        }
+
+        for (i = idx2; i < 3; i++) {
+            this->off_keys[i] = 0;
+        }
+    }
 }
 
 extern void padmgr_ClearPadData(pad_t* pad) {
@@ -346,6 +421,8 @@ static void padmgr_MainProc(void* arg) {
 }
 
 extern void padmgr_Init(OSMessageQueue* mq) {
+    s32 keyboard_chan;
+
     bzero(this, sizeof(padmgr));
     osCreateMesgQueue(&this->serial_mq, &this->_msg24, 1);
     padmgr_UnlockSerialMesgQ(mq);
@@ -354,6 +431,14 @@ extern void padmgr_Init(OSMessageQueue* mq) {
     osContInit(mq, &this->pad_pattern, this->pad_status);
     this->num_controllers = MAXCONTROLLERS;
     osContSetCh(this->num_controllers);
+
+    keyboard_chan = GCKB_Detect();
+    if (keyboard_chan != -1) {
+        BOOL init_res = GCKB_Init(keyboard_chan);
+        OSReport("GCKB found keyboard on chan %d | init result: %d\n", keyboard_chan, init_res);
+    } else {
+        OSReport("GCKB no keyboard detected\n");
+    }
 }
 
 extern void padmgr_Create(OSMessageQueue* serial_mq, OSId id, OSPri priority, void* stackend, size_t stack_size) {
@@ -369,4 +454,16 @@ extern int padmgr_isConnectedController(int idx) {
     }
 
     return FALSE;
+}
+
+extern const u8* padmgr_getPressedKeys(void) {
+    return this->keyboard_keys;
+}
+
+extern const u8* padmgr_getTriggerKeys(void) {
+    return this->trigger_keys;
+}
+
+extern const u8* padmgr_getOffKeys(void) {
+    return this->off_keys;
 }
