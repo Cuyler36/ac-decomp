@@ -757,6 +757,10 @@ ac_go_home_npc.c:
     .text: [0x80526F48, 0x805272D8]
     .rodata: [0x806492B8, 0x806492C0]
     .data: [0x806A0FB8, 0x806A0FF8]
+ac_npc_tmp.c:
+    .text: [0x80539794, 0x8053986C]
+ac_npc2_tmp.c:
+    .text: [0x80544A1C, 0x80544AF4]
 ac_npc_curator.c:
     .text: [0x8054B06C, 0x8054CF28]
     .rodata: [0x806495B0, 0x806495B8]
