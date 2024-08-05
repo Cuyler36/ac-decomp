@@ -1,5 +1,7 @@
 #include "m_npc.h"
 
+// clang-format off
+
 s8 npc_grow_list[] = {
   mNpc_GROW_STARTER,
   mNpc_GROW_STARTER,
@@ -237,6 +239,8 @@ s8 npc_grow_list[] = {
   mNpc_GROW_ISLANDER,
   mNpc_GROW_ISLANDER,
   mNpc_GROW_STARTER,
+  mNpc_GROW_MOVE_IN, // Bow
+  mNpc_GROW_MOVE_IN, // Meow
   mNpc_GROW_STARTER,
-  mNpc_GROW_STARTER
+  mNpc_GROW_STARTER,
 };

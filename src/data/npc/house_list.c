@@ -1,6 +1,8 @@
 #include "m_npc.h"
 #include "m_name_table.h"
 
+// clang-format off
+
 mNpc_NpcHouseData_c npc_house_list[] = {
   { 0, 2, ITM_WALL54, ITM_CARPET54, 0x01dc, 0x01dd },
   { 4, 3, ITM_WALL30, ITM_CARPET01, 0x01ec, 0x01ed },
@@ -238,6 +240,8 @@ mNpc_NpcHouseData_c npc_house_list[] = {
   { 0, 1, ITM_WALL60, ITM_CARPET60, 0x0330, 0x0331 },
   { 1, 2, ITM_WALL44, ITM_CARPET44, 0x01e8, 0x01e9 },
   { 2, 1, ITM_WALL39, ITM_CARPET20, 0x01ea, 0x01eb },
+  { 1, 3, ITM_WALL29, ITM_CARPET30, 0x0206, 0x0207 }, // Bow 
+  { 1, 3, ITM_WALL29, ITM_CARPET30, 0x0206, 0x0207 }, // Meow
   { 1, 2, ITM_WALL39, ITM_CARPET41, 0x0000, 0x0000 },
-  { 1, 2, ITM_WALL03, ITM_CARPET03, 0x0000, 0x0000 }
+  { 1, 2, ITM_WALL03, ITM_CARPET03, 0x0000, 0x0000 },
 };

@@ -139,7 +139,7 @@ typedef struct offset_table_s {
 } mNT_offset_table_c;
 
 /* TODO: these should be calculated via definitions later */
-#define NPC_NUM 236
+#define NPC_NUM 238
 #define NPC_ISLANDER_NUM 18
 #define ALL_NPC_NUM NPC_NUM + 2 // include the two test villagers
 

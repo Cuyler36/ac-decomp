@@ -5301,6 +5301,42 @@ extern unsigned char end_1_mouth5_TA_tex_txt[];
 extern unsigned char end_1_mouth6_TA_tex_txt[];
 extern unsigned char end_1_tmem_txt[];
 
+/* @Custom - Meow */
+extern unsigned short cat_16_pal[];
+extern unsigned char cat_16_eye1_TA_tex_txt[];
+extern unsigned char cat_16_eye2_TA_tex_txt[];
+extern unsigned char cat_16_eye3_TA_tex_txt[];
+extern unsigned char cat_16_eye4_TA_tex_txt[];
+extern unsigned char cat_16_eye5_TA_tex_txt[];
+extern unsigned char cat_16_eye6_TA_tex_txt[];
+extern unsigned char cat_16_eye7_TA_tex_txt[];
+extern unsigned char cat_16_eye8_TA_tex_txt[];
+extern unsigned char cat_16_mouth1_TA_tex_txt[];
+extern unsigned char cat_16_mouth2_TA_tex_txt[];
+extern unsigned char cat_16_mouth3_TA_tex_txt[];
+extern unsigned char cat_16_mouth4_TA_tex_txt[];
+extern unsigned char cat_16_mouth5_TA_tex_txt[];
+extern unsigned char cat_16_mouth6_TA_tex_txt[];
+extern unsigned char cat_16_tmem_txt[];
+
+/* @Custom - Bow */
+extern unsigned short dog_11_pal[];
+extern unsigned char dog_11_eye1_TA_tex_txt[];
+extern unsigned char dog_11_eye2_TA_tex_txt[];
+extern unsigned char dog_11_eye3_TA_tex_txt[];
+extern unsigned char dog_11_eye4_TA_tex_txt[];
+extern unsigned char dog_11_eye5_TA_tex_txt[];
+extern unsigned char dog_11_eye6_TA_tex_txt[];
+extern unsigned char dog_11_eye7_TA_tex_txt[];
+extern unsigned char dog_11_eye8_TA_tex_txt[];
+extern unsigned char dog_11_mouth1_TA_tex_txt[];
+extern unsigned char dog_11_mouth2_TA_tex_txt[];
+extern unsigned char dog_11_mouth3_TA_tex_txt[];
+extern unsigned char dog_11_mouth4_TA_tex_txt[];
+extern unsigned char dog_11_mouth5_TA_tex_txt[];
+extern unsigned char dog_11_mouth6_TA_tex_txt[];
+extern unsigned char dog_11_tmem_txt[];
+
 extern aNPC_draw_data_c npc_draw_data_tbl[] = {
     {
         ACTOR_OBJ_BANK_133,
@@ -15196,6 +15232,92 @@ extern aNPC_draw_data_c npc_draw_data_tbl[] = {
                 cat_15_mouth4_TA_tex_txt,
                 cat_15_mouth5_TA_tex_txt,
                 cat_15_mouth6_TA_tex_txt,
+            },
+            0,
+            32,
+            128,
+        },
+        0.008999999612569809,
+        0,
+        14,
+        13,
+        33,
+        0,
+        0,
+        286,
+        20,
+        40,
+        -1,
+        -1,
+    },
+    /* @Custom - Bow */
+    {
+        ACTOR_OBJ_BANK_182,
+        ACTOR_OBJ_BANK_373,
+        &cKF_bs_r_dog_1,
+        {
+            dog_11_tmem_txt,
+            dog_11_pal,
+            {
+                dog_11_eye1_TA_tex_txt,
+                dog_11_eye2_TA_tex_txt,
+                dog_11_eye3_TA_tex_txt,
+                dog_11_eye4_TA_tex_txt,
+                dog_11_eye5_TA_tex_txt,
+                dog_11_eye6_TA_tex_txt,
+                dog_11_eye7_TA_tex_txt,
+                dog_11_eye8_TA_tex_txt,
+            },
+            {
+                dog_11_mouth1_TA_tex_txt,
+                dog_11_mouth2_TA_tex_txt,
+                dog_11_mouth3_TA_tex_txt,
+                dog_11_mouth4_TA_tex_txt,
+                dog_11_mouth5_TA_tex_txt,
+                dog_11_mouth6_TA_tex_txt,
+            },
+            48,
+            0,
+            80,
+        },
+        0.009499999694526196,
+        0,
+        9,
+        3,
+        37,
+        0,
+        0,
+        46,
+        20,
+        45,
+        -1,
+        -1,
+    },
+    /* @Custom - Meow */
+    {
+        ACTOR_OBJ_BANK_133,
+        ACTOR_OBJ_BANK_459,
+        &cKF_bs_r_cat_1,
+        {
+            cat_16_tmem_txt,
+            cat_16_pal,
+            {
+                cat_16_eye1_TA_tex_txt,
+                cat_16_eye2_TA_tex_txt,
+                cat_16_eye3_TA_tex_txt,
+                cat_16_eye4_TA_tex_txt,
+                cat_16_eye5_TA_tex_txt,
+                cat_16_eye6_TA_tex_txt,
+                cat_16_eye7_TA_tex_txt,
+                cat_16_eye8_TA_tex_txt,
+            },
+            {
+                cat_16_mouth1_TA_tex_txt,
+                cat_16_mouth2_TA_tex_txt,
+                cat_16_mouth3_TA_tex_txt,
+                cat_16_mouth4_TA_tex_txt,
+                cat_16_mouth5_TA_tex_txt,
+                cat_16_mouth6_TA_tex_txt,
             },
             0,
             32,

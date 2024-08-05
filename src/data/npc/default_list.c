@@ -1,6 +1,8 @@
 #include "m_npc.h"
 #include "m_name_table.h"
 
+// clang-format off
+
 mNpc_Default_Data_c npc_def_list[] = {
   { ITM_CLOTH038, 0x0077, 0x00 },
   { ITM_CLOTH115, 0x0087, 0x0a },
@@ -238,6 +240,8 @@ mNpc_Default_Data_c npc_def_list[] = {
   { ITM_CLOTH027, 0x0729, 0x1f },
   { ITM_CLOTH026, 0x072a, 0x11 },
   { ITM_CLOTH191, 0x072c, 0x0d },
+  { ITM_CLOTH182, 0x0077, 0x22 }, // Bow (TODO: catchphrase)
+  { ITM_CLOTH038, 0x0077, 0x0b }, // Meow (TODO: catchphrase)
   { ITM_CLOTH244, 0x072c, 0x01 },
-  { ITM_CLOTH003, 0x0025, 0x00 }
+  { ITM_CLOTH003, 0x0025, 0x00 },
 };
