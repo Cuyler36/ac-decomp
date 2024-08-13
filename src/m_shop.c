@@ -1521,41 +1521,41 @@ extern mActor_name_t mSP_GetNowShopBgNum() {
     switch (Save_Get(scene_no)) {
         case SCENE_SHOP0: {
             if (Common_Get(tanuki_shop_status) == mSP_TANUKI_SHOP_STATUS_FUKUBIKI) {
-                return 0xFA;
+                return BG_TYPE_250;
             }
 
-            return 0xF8;
+            return BG_TYPE_248;
         }
 
         case SCENE_CONVENI: {
             if (Common_Get(tanuki_shop_status) == mSP_TANUKI_SHOP_STATUS_FUKUBIKI) {
-                return 0xFB;
+                return BG_TYPE_251;
             }
 
-            return 0xFE;
+            return BG_TYPE_254;
         }
 
         case SCENE_SUPER: {
             if (Common_Get(tanuki_shop_status) == mSP_TANUKI_SHOP_STATUS_FUKUBIKI) {
-                return 0xFC;
+                return BG_TYPE_252;
             }
 
-            return 0x102;
+            return BG_TYPE_258;
         }
 
         case SCENE_DEPART: {
             if (Common_Get(tanuki_shop_status) == mSP_TANUKI_SHOP_STATUS_FUKUBIKI) {
-                return 0xFD;
+                return BG_TYPE_ROM_SHOP4_FUKU;
             }
 
-            return 0x100;
+            return BG_TYPE_ROM_SHOP4_1;
         }
 
         case SCENE_DEPART_2:
-            return 0x101;
+            return BG_TYPE_257;
 
         default:
-            return 0xFE;
+            return BG_TYPE_254;
     }
 }
 

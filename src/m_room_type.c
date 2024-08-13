@@ -2052,29 +2052,29 @@ extern mActor_name_t mRmTp_GetPlayerRoomCollisionIdx(mActor_name_t field_id, mAc
         switch (Save_Get(scene_no)) {
             case SCENE_MY_ROOM_M:
                 if (has_basement) {
-                    return 0x11E;
+                    return BG_TYPE_286;
                 } else {
-                    return 0x104;
+                    return BG_TYPE_260;
                 }
             case SCENE_MY_ROOM_L:
                 if (has_basement) {
-                    return 0x11F;
+                    return BG_TYPE_287;
                 } else {
-                    return 0x0F2;
+                    return BG_TYPE_242;
                 }
             case SCENE_MY_ROOM_LL1:
                 if (has_basement) {
-                    return 0x120;
+                    return BG_TYPE_288;
                 } else {
-                    return 0x11B;
+                    return BG_TYPE_283;
                 }
             case SCENE_MY_ROOM_LL2:
-                return 0x11C;
+                return BG_TYPE_284;
             case SCENE_MY_ROOM_BASEMENT_S:
             case SCENE_MY_ROOM_BASEMENT_M:
             case SCENE_MY_ROOM_BASEMENT_L:
             case SCENE_MY_ROOM_BASEMENT_LL1:
-                return 0x121;
+                return BG_TYPE_289;
 
             default:
                 return bg_idx;
