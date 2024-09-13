@@ -92,6 +92,11 @@ m_demo.c:
 m_eappli.c:
     .text: [0x8039A5E0, 0x8039A960]
     .bss: [0x81295150, 0x81295550]
+m_event.c:
+    .text: [0x8039A960, 0x8039F510]
+    .rodata: [0x80641F00, 0x80641F38]
+    .data: [0x80651918, 0x806522F8]
+    .bss: [0x81295550, 0x81295790]
 m_fbdemo.c:
     .text: [0x803A0350, 0x803A0ABC]
     .rodata: [0x80641F40, 0x80641F60]
@@ -142,6 +147,11 @@ m_fuusen.c:
     .bss: [0x81295C70, 0x81295C80]
 m_huusui_room.c:
     .text: [0x803B1908, 0x803B1968]
+m_handbill.c:
+    .text: [0x803B1968, 0x803B2E88]
+    .rodata: [0x80642288, 0x80642478]
+    .data: [0x806546B0, 0x806546C8]
+    .bss: [0x81295C80, 0x81296128]
 m_home.c:
     .text: [0x803B2E88, 0x803B3688]
     .data: [0x806546C8, 0x80655340]
@@ -219,6 +229,11 @@ m_needlework.c:
     .text: [0x803C98EC, 0x803C9F7C]
     .data: [0x8065ABC0, 0x8065AE30]
     .bss: [0x81298F60, 0x81299180]
+m_notice.c:
+    .text: [0x803C9F7C, 0x803CB340]
+    .rodata: [0x80642978, 0x806429B8]
+    .data: [0x8065AE30, 0x8065AEE8]
+    .bss: [0x81299180, 0x81299240]
 m_npc.c:
     .text: [0x803CB340, 0x803D7570]
     .rodata: [0x806429B8, 0x806429F0]
@@ -241,6 +256,11 @@ m_player_call.c:
     .text: [0x803D8AEC, 0x803D8CEC]
     .data: [0x8065B9A0, 0x8065B9C8]
     .bss: [0x8129CC98, 0x8129CCA8]
+m_player_lib.c:
+    .text: [0x803D8CEC, 0x803DE8A0]
+    .rodata: [0x80642A10, 0x806431C8]
+    .data: [0x8065B9C8, 0x8065BE98]
+    .bss: [0x8129CCA8, 0x8129CD40]
 m_police_box.c:
     .text: [0x803DE8A0, 0x803DEE38]
     .rodata: [0x806431C8, 0x806431D8]
@@ -304,6 +324,15 @@ m_skin_matrix.c:
 m_snowman.c:
     .text: [0x803F1BB4, 0x803F1F94]
     .rodata: [0x80643318, 0x80643330]
+m_titledemo.c:
+    .text: [0x803F1F94, 0x803F2428]
+    .rodata: [0x80643330, 0x80643350]
+    .data: [0x8065E2D8, 0x8065E2F0]
+    .bss: [0x8129F408, 0x8129F410]
+m_train_control.c:
+    .text: [0x803F2428, 0x803F33DC]
+    .rodata: [0x80643350, 0x806433B0]
+    .data: [0x8065E2F0, 0x8065E378]
 m_time.c:
     .text: [0x803F33DC, 0x803F3E58]
     .rodata: [0x806433B0, 0x806433D8]
@@ -528,6 +557,23 @@ ac_set_ovl_insect.c:
 ac_shop_design.c:
     .text: [0x8049C748, 0x8049D51C]
     .data: [0x8068E3C0, 0x8068E430]
+ac_shop_goods.c:
+    .text: [0x8049D51C, 0x8049E6F4]
+    .rodata: [0x80644E28, 0x80645CB0]
+    .data: [0x8068E430, 0x8068E458]
+    .bss: [0x812FD270, 0x812FD480]
+ac_shop_indoor.c:
+    .text: [0x8049E6F4, 0x8049F40C]
+    .rodata: [0x80645CB0, 0x80645CD0]
+    .data: [0x8068E458, 0x8068E520]
+    .bss: [0x812FD480, 0x812FD488]
+ac_shop_level.c:
+    .text: [0x8049F40C, 0x8049FEC4]
+    .data: [0x8068E520, 0x8068E708]
+ac_sign.c:
+    .text: [0x804A127C, 0x804A3328]
+    .rodata: [0x80645D18, 0x80645D78]
+    .data: [0x8068E880, 0x8068E8E8]
 ac_t_anrium1.c:
     .text: [0x804A7750, 0x804A78A4]
     .data: [0x8068E9C8, 0x8068EA08]
@@ -697,6 +743,10 @@ m_mark_room_ovl.c:
     .rodata: [0x806465C8, 0x806465D0]
     .data: [0x8069CAF0, 0x8069E580]
     .bss: [0x81300BD8, 0x813010D0]
+m_player.c:
+    .text: [0x804D3B24, 0x80508E58]
+    .rodata: [0x806465D0, 0x80648ED0]
+    .data: [0x8069E580, 0x8069E918]
 m_random_field_ovl.c:
     .text: [0x80508E58, 0x8050B3D0]
     .rodata: [0x80648ED0, 0x80648ED8]
@@ -726,6 +776,10 @@ ac_aprilfool_control.c:
 ac_groundhog_control.c:
     .text: [0x805155C8, 0x80515C48]
     .data: [0x8069FD88, 0x8069FDD0]
+ac_ev_broker.c:
+    .text: [0x80519D4C, 0x8051A880]
+    .rodata: [0x80649160, 0x80649178]
+    .data: [0x806A0128, 0x806A01B0]
 ac_ev_castaway.c:
     .text: [0x8051CAC4, 0x8051CDCC]
     .rodata: [0x806491B0, 0x806491B8]
@@ -842,6 +896,10 @@ ac_br_shop.c:
     .text: [0x805A856C, 0x805A9474]
     .rodata: [0x8064A630, 0x8064A660]
     .data: [0x806C4560, 0x806C4688]
+ac_bridge_a.c:
+    .text: [0x805A9474, 0x805A9CA0]
+    .rodata: [0x8064A660, 0x8064A6D0]
+    .data: [0x806C4688, 0x806C4730]
 ac_buggy.c:
     .text: [0x805A9CA0, 0x805AAB3C]
     .rodata: [0x8064A6D0, 0x8064A708]
@@ -975,6 +1033,11 @@ m_birthday_ovl.c:
     .rodata: [0x8064AE90, 0x8064AEB8]
     .data: [0x806C7BE0, 0x806C7C60]
     .bss: [0x8133E0C0, 0x8133E0C8]
+m_board_ovl.c:
+    .text: [0x805C4E94, 0x805C67DC]
+    .rodata: [0x8064AEB8, 0x8064AF28]
+    .data: [0x806C7C60, 0x806C8880]
+    .bss: [0x8133E0C8, 0x8133E210]
 m_catalog_ovl.c:
     .text: [0x805C9254, 0x805CC1F4]
     .rodata: [0x8064AF90, 0x8064B090]
@@ -1159,6 +1222,10 @@ ef_halloween.c:
     .text: [0x8060D44C, 0x8060D654]
     .rodata: [0x8064C1C0, 0x8064C1D0]
     .data: [0x806D2600, 0x806D2618]
+ef_halloween_smoke.c:
+    .text: [0x8060D654, 0x8060D8D8]
+    .rodata: [0x8064C1D0, 0x8064C1E0]
+    .data: [0x806D2618, 0x806D2660]
 ef_hanabi_dummy.c:
     .text: [0x8060E6D8, 0x8060E9B8]
     .rodata: [0x8064C2A0, 0x8064C2C0]
@@ -1166,6 +1233,9 @@ ef_hanabi_dummy.c:
 ef_hanatiri.c:
     .text: [0x80610478, 0x8061061C]
     .data: [0x806D2C08, 0x806D2C20]
+ef_kasamizu.c:
+    .text: [0x806127BC, 0x80612960]
+    .data: [0x806D2DE0, 0x806D2E08]
 ef_killer.c:
     .text: [0x80614178, 0x8061481C]
     .rodata: [0x8064C680, 0x8064C6C0]
@@ -1174,6 +1244,21 @@ ef_make_hem.c:
     .text: [0x806162B0, 0x8061710C]
     .rodata: [0x8064C818, 0x8064C860]
     .data: [0x806D3160, 0x806D31B8]
+ef_otosiana.c:
+    .text: [0x8061A4E0, 0x8061A650]
+    .data: [0x806D33B8, 0x806D33D8]
+ef_pun.c:
+    .text: [0x8061A650, 0x8061A824]
+    .rodata: [0x8064CAB8, 0x8064CAC0]
+    .data: [0x806D33D8, 0x806D33F0]
+ef_pun_sekimen.c:
+    .text: [0x8061A824, 0x8061AA20]
+    .rodata: [0x8064CAC0, 0x8064CAD8]
+    .data: [0x806D33F0, 0x806D3408]
+ef_pun_yuge.c:
+    .text: [0x8061AA20, 0x8061AE9C]
+    .rodata: [0x8064CAD8, 0x8064CB08]
+    .data: [0x806D3408, 0x806D3478]
 ef_tent_lamp.c:
     .text: [0x80622304, 0x8062260C]
     .rodata: [0x8064CF10, 0x8064CF38]
@@ -1257,6 +1342,14 @@ data/npc/model/mdl/wls_1.c:
     .data: [0x806E9AC0, 0x806EBFF0]
 data/npc/model/tex/wls_1.c:
     .data: [0x806EC000, 0x806ECFA0]
+data/scene/BG_TEST01.c:
+    .data: [0x806ECFA0, 0x806ECFF0]
+data/scene/BG_TEST01_XLU.c:
+    .data: [0x806ECFF0, 0x806ED040]
+data/scene/broker_shop.c:
+    .data: [0x806ED040, 0x806ED0C0]
+data/scene/buggy.c:
+    .data: [0x806ED0C0, 0x806ED128]
 data/npc/model/mdl/bea_1.c:
     .data: [0x806EF078, 0x806F1030]
 data/npc/model/tex/bea_1.c:
@@ -1277,10 +1370,8 @@ data/npc/model/tex/bea_9.c:
     .data: [0x806F8F20, 0x806FA140]
 data/npc/model/tex/bea_10.c:
     .data: [0x806FA140, 0x806FB360]
-
 data/field/bg/acre/bg_data.c:
     .data: [0x806FE048, 0x8074B840]
-
 # dataobject.obj files
 data/field/bg/flower/obj_flower.c:
     .data: [0x8074FE80, 0x807508C0]
@@ -1322,6 +1413,8 @@ data/npc/model/tex/brd_9.c:
     .data: [0x8077D980, 0x8077E6A0]
 data/npc/model/tex/brd_10.c:
     .data: [0x8077E6A0, 0x8077F3C0]
+data/player/BOY_part_data.c:
+    .data: [0x807D5F60, 0x807D5FE8]
 data/npc/model/mdl/fox_1.c:
     .data: [0x807D5FE8, 0x807D8098]
 data/npc/model/tex/fox_1.c:
@@ -1504,6 +1597,8 @@ data/npc/model/tex/duk_9.c:
     .data: [0x808433A0, 0x808445C0]
 data/npc/model/tex/duk_10.c:
     .data: [0x808445C0, 0x808457E0]
+data/scene/event_notification.c:
+    .data: [0x808457E0, 0x80845830]
 data/npc/model/mdl/elp_1.c:
     .data: [0x80845830, 0x808479A0]
 data/npc/model/tex/elp_1.c:
@@ -1520,6 +1615,10 @@ data/npc/model/tex/elp_6.c:
     .data: [0x8084D440, 0x8084E660]
 data/npc/model/tex/elp_7.c:
     .data: [0x8084E660, 0x8084F880]
+data/scene/fg_tool_in.c:
+    .data: [0x8084F880, 0x8084F940]
+data/scene/field_tool_field.c:
+    .data: [0x8084F940, 0x8084F9B0]
 data/npc/model/mdl/flg_1.c:
     .data: [0x80857D80, 0x808597E0]
 data/npc/model/tex/flg_1.c:
@@ -1642,6 +1741,8 @@ data/npc/model/tex/xsq_1.c:
     .data: [0x808BE240, 0x808BF660]
 data/item/item_name.c:
     .data: [0x808BF660, 0x808C8830]
+data/scene/kamakura.c:
+    .data: [0x808C8830, 0x808C88A8]
 data/npc/model/mdl/boa_1.c:
     .data: [0x808C88A8, 0x808CAF48]
 data/npc/model/tex/boa_1.c:
@@ -1678,6 +1779,8 @@ data/npc/model/tex/kal_5.c:
     .data: [0x808DCC60, 0x808DDF00]
 data/npc/model/tex/kal_6.c:
     .data: [0x808DDF00, 0x808DF1A0]
+data/scene/lighthouse.c:
+    .data: [0x808DF1A0, 0x808DF220]
 data/npc/model/mdl/lon_1.c:
     .data: [0x808E1A10, 0x808E3F78]
 data/npc/model/tex/lon_1.c:
@@ -1688,6 +1791,16 @@ data/npc/model/tex/lon_3.c:
     .data: [0x808E6540, 0x808E7820]
 data/npc/model/tex/lon_4.c:
     .data: [0x808E7820, 0x808E8B00]
+data/scene/museum_entrance.c:
+    .data: [0x808E8B00, 0x808E8C08]
+data/scene/museum_fish.c:
+    .data: [0x808E8C08, 0x808E8CB0]
+data/scene/museum_fossil.c:
+    .data: [0x808E8CB0, 0x808E8D30]
+data/scene/museum_insect.c:
+    .data: [0x808E8D30, 0x808E8DF0]
+data/scene/museum_picture.c:
+    .data: [0x808E8DF0, 0x808E8EA0]
 data/npc/model/mdl/mos_1.c:
     .data: [0x808EAEA0, 0x808ECAC8]
 data/npc/model/tex/mos_1.c:
@@ -1728,6 +1841,12 @@ data/npc/model/tex/mus_10.c:
     .data: [0x809033E0, 0x80904600]
 data/model/mural/obj_mural.c:
     .data: [0x80904600, 0x80904700]
+data/scene/NEEDLEWORK.c:
+    .data: [0x80911C68, 0x80911D20]
+data/scene/npc_room01.c:
+    .data: [0x80911D20, 0x80911DC8]
+data/scene/npc_room_island.c:
+    .data: [0x80911DC8, 0x80911E70]
 data/npc/model/mdl/hgh_1.c:
     .data: [0x80911E70, 0x80914610]
 data/npc/model/tex/hgh_1.c:
@@ -1758,6 +1877,38 @@ data/npc/model/tex/ost_3.c:
     .data: [0x8097EBC0, 0x8097F920]
 data/npc/model/tex/ost_4.c:
     .data: [0x8097F920, 0x80980680]
+data/scene/player_room_island.c:
+    .data: [0x80980680, 0x80980728]
+data/scene/player_room_ll1.c:
+    .data: [0x80980728, 0x809807E8]
+data/scene/player_room_ll2.c:
+    .data: [0x809807E8, 0x80980890]
+data/scene/player_room_l.c:
+    .data: [0x80980890, 0x80980938]
+data/scene/player_room_m.c:
+    .data: [0x80980938, 0x809809E0]
+data/scene/player_room_s.c:
+    .data: [0x809809E0, 0x80980A88]
+data/scene/PLAYER_SELECT2.c:
+    .data: [0x80980A88, 0x80980AD0]
+data/scene/PLAYER_SELECT3.c:
+    .data: [0x80980AD0, 0x80980B18]
+data/scene/PLAYER_SELECT4.c:
+    .data: [0x80980B18, 0x80980B60]
+data/scene/player_select.c:
+    .data: [0x80980B60, 0x80980BA8]
+data/scene/police_box.c:
+    .data: [0x80980BA8, 0x80980C48]
+data/scene/post_office.c:
+    .data: [0x80980C48, 0x80980D00]
+data/scene/p_room_bm_ll1.c:
+    .data: [0x80980D00, 0x80980D80]
+data/scene/p_room_bm_l.c:
+    .data: [0x80980D80, 0x80980E00]
+data/scene/p_room_bm_m.c:
+    .data: [0x80980E00, 0x80980E80]
+data/scene/p_room_bm_s.c:
+    .data: [0x80980E80, 0x80980F00]
 data/npc/model/mdl/pgn_1.c:
     .data: [0x80980F28, 0x80983140]
 data/npc/model/tex/pgn_1.c:
@@ -1858,6 +2009,22 @@ data/npc/model/tex/rhn_3.c:
     .data: [0x809BEF40, 0x809C0160]
 data/npc/model/tex/rhn_4.c:
     .data: [0x809C0160, 0x809C1380]
+data/scene/shop01.c:
+    .data: [0x809C8B98, 0x809C8C20]
+data/scene/shop02.c:
+    .data: [0x809C8C20, 0x809C8CA8]
+data/scene/shop03.c:
+    .data: [0x809C8CA8, 0x809C8D28]
+data/scene/shop04_1f.c:
+    .data: [0x809C8D28, 0x809C8DB0]
+data/scene/shop04_2f.c:
+    .data: [0x809C8DB0, 0x809C8E38]
+data/scene/start_demo1.c:
+    .data: [0x809C8E38, 0x809C8EA8]
+data/scene/start_demo2.c:
+    .data: [0x809C8EA8, 0x809C8F18]
+data/scene/start_demo3.c:
+    .data: [0x809C8F18, 0x809C8FA0]
 data/npc/model/mdl/snt_1.c:
     .data: [0x809C9148, 0x809CAD30]
 data/npc/model/tex/snt_1.c:
@@ -1924,6 +2091,33 @@ data/npc/model/mdl/rcs_1.c:
     .data: [0x80C09AC0, 0x80C0BBA8]
 data/npc/model/tex/rcs_1.c:
     .data: [0x80C0BBC0, 0x80C0C960]
+data/scene/tent.c:
+    .data: [0x80C0C960, 0x80C0C9D8]
+
+data/scene/test_fd_npc_land.c:
+    .data: [0x80C0C9D8, 0x80C0CA68]
+data/scene/water_test.c:
+    .data: [0x80C0CA68, 0x80C0CAE8]
+data/scene/test_step01.c:
+    .data: [0x80C0CAE8, 0x80C0CB18]
+data/scene/title_demo.c:
+    .data: [0x80C0CB18, 0x80C0CBA0]
+# acres
+# data/field/bg/acre/grd_post_office/grd_post_office.c:
+    # .data: [0x80C5DBA0, 0x80C63408]
+
+# scenes
+data/scene/test01.c:
+    .data: [0x80C2C800, 0x80C2C888]
+data/scene/test02.c:
+    .data: [0x80C2C888, 0x80C2C8D8]
+data/scene/test03.c:
+    .data: [0x80C2C8D8, 0x80C2C960]
+data/scene/test04.c:
+    .data: [0x80C2C960, 0x80C2C9B0]
+data/scene/test05.c:
+    .data: [0x80C2C9B0, 0x80C2C9F8]
+
 data/npc/model/mdl/tig_1.c:
     .data: [0x80C2C9F8, 0x80C2EE88]
 data/npc/model/tex/tig_1.c:
@@ -2774,10 +2968,6 @@ data/field/bg/acre/grd_s_t_st1_3/grd_s_t_st1_3.c:
     .data: [0x80DD5280, 0x80DD61A0]
 data/field/bg/acre/rom_toudai/rom_toudai.c:
     .data: [0x80F08520, 0x80F0B020]
-
-# acres
-# data/field/bg/acre/grd_post_office/grd_post_office.c:
-    # .data: [0x80C5DBA0, 0x80C63408]
 
 # map submenu
 data/submenu/map/kan_tizu.c:

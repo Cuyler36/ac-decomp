@@ -2,7 +2,9 @@ FROM ubuntu:24.04 as build
 
 # --- basic package installation ---
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y \
+        cmake \
         git \
         ninja-build \
         python3 \
@@ -17,7 +19,7 @@ RUN pip install --break-system-packages -r /temp/requirements.txt
 RUN rm -rf /temp
 
 # --- wibo installation ---
-RUN wget https://github.com/decompals/wibo/releases/download/0.6.13/wibo
+RUN wget https://github.com/decompals/wibo/releases/latest/download/wibo
 RUN install ./wibo /usr/bin
 RUN rm wibo
 

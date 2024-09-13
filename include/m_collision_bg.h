@@ -134,6 +134,13 @@ enum {
     mCoBG_AREA_NUM
 };
 
+enum {
+    mCoBG_BLOCK_BGCHECK_MODE_NORMAL,
+    mCoBG_BLOCK_BGCHECK_MODE_INTRO_DEMO,
+
+    mCoBG_BLOCK_BGCHECK_MODE_NUM
+};
+
 /* sizeof(mCoBG_CollisionData_c) == 4*/
 typedef struct collision_bg_data_s {
     /* 1------- -------- -------- -------- */ u32 shape : 1; /* collision shape */
@@ -331,6 +338,23 @@ extern void mCoBG_BgCheckControll_RemoveDirectedUnitColumn(xyz_t* reverse_pos, A
                                                            s16 check_type, int ut_x, int ut_z);
 extern xyz_t mCoBG_UniqueWallCheck(ACTOR* actorx, f32 range, f32 y_ofs);
 extern xyz_t mCoBG_ScopeWallCheck(ACTOR* actorx, const xyz_t* pos, f32 x, f32 z, f32 range, f32 y_ofs);
+extern int mCoBG_ScrollCheck(xyz_t start_pos, xyz_t end_pos, f32 radius);
+extern int mCoBG_GetBlockBgCheckMode(void);
+extern void mCoBG_GroundCheckOnly(xyz_t* reverse_pos, ACTOR* actor, f32 check_range, f32 offset_y, s16 check_type);
+extern f32 mCoBG_Wpos2BgUtCenterHeight_AddColumn(xyz_t pos);
+extern f32 mCoBG_UtNum2UtCenterY_Keep(int ut_x, int ut_z);
+extern int mCoBG_RegistDecalCircle(const xyz_t* pos_p, f32 radius_start, f32 radius_end, s16 timer);
+
+typedef int (*mCoBG_LINECHECK_PROC)(mActor_name_t);
+
+#define mCoBG_LINECHECK_CAT_WALL (1 << 0)
+#define mCoBG_LINECHECK_CAT_GROUND (1 << 1)
+#define mCoBG_LINECHECK_CAT_WATER (1 << 2)
+
+extern int mCoBG_LineCheck_RemoveFg(xyz_t* rev_pos, xyz_t start_pos, xyz_t end_pos, mCoBG_LINECHECK_PROC check_proc,
+                                    int category);
+extern int mCoBG_GetMoveBgHeight(f32* move_bg_height, xyz_t* pos_p);
+extern int mCoBG_WoodSoundEffect(const xyz_t* pos_p);
 
 extern void mCoBG_InitMoveBgData();
 extern void mCoBG_InitBlockBgCheckMode();

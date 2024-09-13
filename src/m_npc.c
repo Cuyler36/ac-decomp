@@ -362,6 +362,8 @@ extern void mNpc_CopyAnimalMemory(Anmmem_c* dst, Anmmem_c* src) {
 */
 
 extern void mNpc_AddFriendship(Anmmem_c* memory, int amount) {
+    int friendship;
+
 /* @BUG - devs checked for memory being NULL *after* deferencing it */
 #ifdef BUGFIXES
     if (memory == NULL) {
@@ -369,7 +371,7 @@ extern void mNpc_AddFriendship(Anmmem_c* memory, int amount) {
     }
 #endif
 
-    int friendship = memory->friendship + amount;
+    friendship = memory->friendship + amount;
 
 #ifndef BUGFIXES
     if (memory == NULL) {
@@ -1757,7 +1759,7 @@ static void mNpc_SendEventPresentMailSex(int* selected, u8* type, Animal_c* anim
 
 /* this used to be mNpc_SendEventPresentMail_common in DnM and DnM+ (handled both valentine's day & white day) */
 
-extern int mNpc_SendVtdayMail() {
+extern int mNpc_SendVtdayMail(int type) {
     u8 types[ANIMAL_NUM_MAX];
     int other_sex_best_friends[ANIMAL_NUM_MAX];
     Animal_c* animal_p;

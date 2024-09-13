@@ -45,16 +45,16 @@ typedef enum audio_sound_effects {
     NA_SE_DRAWER_SHUT = 0x3A,
 
     NA_SE_ITEM_GET = 0x40,
-    NA_SE_ITEM_HORIDASHI = 0x47,
-
+    NA_SE_47 = 0x47,
     NA_SE_MONEY0 = 0x49,
     NA_SE_MONEY1,
     NA_SE_MONEY2,
     NA_SE_COIN,
+    NA_SE_TEMOCHI_KAZAGURUMA,
 
     NA_SE_52 = 0x52,
 
-    NA_SE_BIRTH_FTR = 0x57,
+    NA_SE_ITEM_HORIDASHI = 0x57,
     NA_SE_CLEAN_UP_FTR = 0x58,
 
     NA_SE_TOOL_FURI = 0x5A, // swing?
@@ -90,6 +90,7 @@ typedef enum audio_sound_effects {
     NA_SE_HANABI3 = HANABI(0x112),
     NA_SE_EAT = 0x113,
 
+    NA_SE_11B = 0x11B,
     NA_SE_WEAR = 0x11C,
 
     NA_SE_SCOOP1 = 0x11E,
@@ -99,6 +100,8 @@ typedef enum audio_sound_effects {
 
     NA_SE_TREE_TOUCH = 0x134,
     NA_SE_TREE_YURASU,
+
+    NA_SE_PUN_YUGE = 0x13B,
 
     NA_SE_DOYON = 0x13F,
 
@@ -134,14 +137,17 @@ typedef enum audio_sound_effects {
     NA_SE_ROTATE = 0x41A,
 
     NA_SE_41C = 0x41C,
-
-    NA_SE_SOFT_CHAIR_SIT = 0x41F,
+    NA_SE_AXE_HIT,
+    NA_SE_AXE_CUT,
+    NA_SE_SOFT_CHAIR_SIT,
     NA_SE_HARD_CHAIR_SIT,
     NA_SE_BUBU_CHAIR_SIT,
     NA_SE_SOFT_CHAIR_STANDUP,
     NA_SE_HARD_CHAIR_STANDUP,
 
     NA_SE_BUBU_CHAIR_STANDUP = 0x429,
+    NA_SE_JUMP,
+    NA_SE_LANDING,
     NA_SE_FTR_DOOR_OPEN = 0x42C,
     NA_SE_FTR_DOOR_CLOSE = 0x42D,
     NA_SE_DRAWER_OPEN = 0x42E,
@@ -150,9 +156,6 @@ typedef enum audio_sound_effects {
 
     NA_SE_UMBRELLA_ROTATE = 0x432,
 
-    NA_SE_JUMP,
-    NA_SE_LANDING,
-
     NA_SE_KARABURI = 0x43A,
 
     NA_SE_ROD_STROKE_SMALL = 0x445,
@@ -160,6 +163,8 @@ typedef enum audio_sound_effects {
     NA_SE_SCOOP_TREE_HIT = 0x448,
     NA_SE_SCOOP_ITEM_HIT,
     NA_SE_AXE_BALL_HIT,
+
+    NA_SE_461 = 0x461,
 
     NA_SE_COIN_GASAGOSO = 0x465,
 

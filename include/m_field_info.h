@@ -25,11 +25,14 @@ extern "C" {
 #define mFI_UT_WORLDSIZE_HALF_X_F (mFI_UT_WORLDSIZE_X_F / 2.0f)
 #define mFI_UT_WORLDSIZE_HALF_Z_F (mFI_UT_WORLDSIZE_X_F / 2.0f)
 
-#define mFI_BK_WORLDSIZE_X (mFI_UT_WORLDSIZE_X * UT_X_NUM)
-#define mFI_BK_WORLDSIZE_Z (mFI_UT_WORLDSIZE_Z * UT_Z_NUM)
+#define mFI_BK_WORLDSIZE_BASE (mFI_UNIT_BASE_SIZE * UT_BASE_NUM)
+#define mFI_BK_WORLDSIZE_BASE_F ((f32)mFI_BK_WORLDSIZE_BASE)
 
-#define mFI_BK_WORLDSIZE_X_F (mFI_UT_WORLDSIZE_X_F * UT_X_NUM)
-#define mFI_BK_WORLDSIZE_Z_F (mFI_UT_WORLDSIZE_Z_F * UT_Z_NUM)
+#define mFI_BK_WORLDSIZE_X mFI_BK_WORLDSIZE_BASE
+#define mFI_BK_WORLDSIZE_Z mFI_BK_WORLDSIZE_BASE
+
+#define mFI_BK_WORLDSIZE_X_F mFI_BK_WORLDSIZE_BASE_F
+#define mFI_BK_WORLDSIZE_Z_F mFI_BK_WORLDSIZE_BASE_F
 
 #define mFI_POS2UT(pos) ((int)((pos) / mFI_UNIT_BASE_SIZE_F))
 
@@ -305,7 +308,7 @@ extern int mFI_UnregistMoveActorList(mActor_name_t actor_name, int bx, int bz);
 extern int mFI_AddMoveActorList(mActor_name_t actor_name, int bx, int bz, int ut_x, int ut_z, s16 arg);
 extern mFM_move_actor_c* mFI_MoveActorListDma(int bx, int bz);
 extern void mFI_InitMoveActorBitData();
-extern void mFI_SetPlayerWade(GAME_PLAY* play);
+extern void mFI_SetPlayerWade(GAME* game);
 extern int mFI_CheckPlayerWade(int wade);
 extern int mFI_GetPlayerWade();
 extern int mFI_GetNextBlockNum(int* bx, int* bz);

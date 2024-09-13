@@ -364,8 +364,8 @@ static void mISL_agb_to_gc_fllot_bit(mHm_fllot_bit_c* gc, u32* agb) {
     gc->wall_original = (u32)gc->wall_original;
     gc->floor_original = (u32)gc->floor_original;
 #else
-    gc->wall_original = agb->wall_original;
-    gc->floor_original = agb->floor_original;
+    gc->wall_original = ((mHm_fllot_bit_c*)(agb))->wall_original;
+    gc->floor_original = ((mHm_fllot_bit_c*)(agb))->floor_original;
 #endif
 }
 
@@ -738,7 +738,7 @@ static void mISL_toHole(mActor_name_t* fg, u16* deposit, int bx, int bz) {
                     hole_no = 0;
                 }
 
-                fg[0] = BURIED_PITFALL_START + hole_no;
+                fg[0] = BURIED_PITFALL_HOLE_START + hole_no;
                 deposit[0] &= ~(1 << ut_x);
             }
 

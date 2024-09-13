@@ -449,8 +449,12 @@ static void Scene_Proc_Sound(GAME_PLAY* play, Scene_Word_u* scene_data) {
 }
 
 static void set_item_info(GAME_PLAY* play, Scene_Word_Data_FieldCt_c* field_ct) {
-    static s16 profile_table[4] = { mAc_PROFILE_BGITEM, mAc_PROFILE_DUMMY, mAc_PROFILE_BGPOLICEITEM,
-                                    mAc_PROFILE_BGPOSTITEM };
+    static s16 profile_table[4] = {
+        mAc_PROFILE_BGITEM,
+        mAc_PROFILE_DUMMY,
+        mAc_PROFILE_BGPOLICEITEM,
+        mAc_PROFILE_BGPOSTITEM,
+    };
 
     int item_type = field_ct->item_type;
 
@@ -507,7 +511,7 @@ extern int goto_other_scene(GAME_PLAY* play, Door_data_c* door_data, int update_
             play->next_scene_no = door_data->next_scene_id;
 
             if (update_player_mode) {
-                mPlib_request_main_invade_type1(play);
+                mPlib_request_main_invade_type1((GAME*)play);
             }
 
             restore_fgdata_all(play);
