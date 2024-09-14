@@ -214,3 +214,29 @@ static int Player_actor_CheckController_forRadio_exercise(GAME* game) {
         return 0;
     }
 }
+
+static int Player_actor_CheckController_forSwitch_tool(GAME* game) {
+    mActor_name_t field_id;
+
+    /* Tool swapping cannot be done in a title demo sequence */
+    if (mEv_CheckTitleDemo() > 0) {
+        return -1;
+    }
+
+    /* Tool swapping can only be done outdoors */
+    field_id = mFI_GetFieldId();
+    if (mFI_GET_TYPE(field_id) != mFI_FIELD_FG) {
+        return -1;
+    }
+
+    /* Get the type (if any) */
+    if (chkTrigger(BUTTON_DLEFT)) {
+        return mPlayer_SWITCH_TOOL_LEFT;
+    } else if (chkTrigger(BUTTON_DRIGHT)) {
+        return mPlayer_SWITCH_TOOL_RIGHT;
+    } else if (chkTrigger(BUTTON_DDOWN)) {
+        return mPlayer_SWITCH_TOOL_PUTAWAY;
+    } else {
+        return -1;
+    }
+}

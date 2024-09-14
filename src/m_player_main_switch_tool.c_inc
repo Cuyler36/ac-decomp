@@ -1,0 +1,215 @@
+static int Player_actor_check_able_request_main_index_for_switch_tool(int direction) {
+    if (direction == mPlayer_SWITCH_TOOL_PUTAWAY && mPr_GetPossessionItemIdx(Now_Private, EMPTY_NO) == -1) {
+        /* No free slots to putaway tool */
+        return TRUE;
+    } else if (direction == mPlayer_SWITCH_TOOL_LEFT || direction == mPlayer_SWITCH_TOOL_RIGHT) {
+        int i;
+
+        for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+            mActor_name_t item = Now_Private->inventory.pockets[i];
+            if (ITEM_NAME_GET_TYPE(item) == NAME_TYPE_ITEM1 && ITEM_NAME_GET_CAT(item) == ITEM1_CAT_TOOL &&
+                mPr_GET_ITEM_COND(Now_Private->inventory.item_conditions, i) == mPr_ITEM_COND_NORMAL) {
+                if (mPlib_Get_ItemNoToItemKind(item) != -1) {
+                    break;
+                }
+            }
+        }
+
+        if (i == mPr_POCKETS_SLOT_COUNT) {
+            /* No other tools in inventory? */
+            return TRUE;
+        }
+    }
+
+    return Player_actor_check_able_request_main_index_for_reset(mPlayer_INDEX_SWITCH_TOOL);
+}
+
+static int Player_actor_request_main_switch_tool(GAME* game, int direction) {
+    if (Player_actor_check_able_request_main_index_for_switch_tool(direction) == FALSE) {
+        GET_PLAYER_ACTOR_GAME(game)->requested_main_index_data.switch_tool.switch_dir = direction;
+
+        Player_actor_request_main_index(game, mPlayer_INDEX_SWITCH_TOOL, mPlayer_REQUEST_PRIORITY_8);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static int player_last_switch_slot_idx = 0;
+
+static void Player_actor_pick_tool(int direction) {
+    int tool_idx = -1;
+    mActor_name_t item;
+    int i;
+
+    switch (direction) {
+        case mPlayer_SWITCH_TOOL_PUTAWAY:
+            if (Now_Private->inventory.pockets[player_last_switch_slot_idx] == EMPTY_NO) {
+                mPr_SetPossessionItem(Now_Private, player_last_switch_slot_idx, Now_Private->equipment,
+                                      mPr_ITEM_COND_NORMAL);
+                Now_Private->equipment = EMPTY_NO;
+            } else {
+                int free_idx = mPr_GetPossessionItemIdx(Now_Private, EMPTY_NO);
+
+                if (free_idx >= 0) {
+                    mPr_SetPossessionItem(Now_Private, free_idx, Now_Private->equipment, mPr_ITEM_COND_NORMAL);
+                    Now_Private->equipment = EMPTY_NO;
+                }
+            }
+            break;
+        case mPlayer_SWITCH_TOOL_LEFT:
+            for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+                player_last_switch_slot_idx--;
+                if (player_last_switch_slot_idx < 0) {
+                    player_last_switch_slot_idx = mPr_POCKETS_SLOT_COUNT - 1;
+                }
+
+                item = Now_Private->inventory.pockets[player_last_switch_slot_idx];
+                if (ITEM_NAME_GET_TYPE(item) == NAME_TYPE_ITEM1 && ITEM_NAME_GET_CAT(item) == ITEM1_CAT_TOOL &&
+                    mPr_GET_ITEM_COND(Now_Private->inventory.item_conditions, player_last_switch_slot_idx) ==
+                        mPr_ITEM_COND_NORMAL) {
+                    if (mPlib_Get_ItemNoToItemKind(item) != -1) {
+                        break;
+                    }
+                }
+            }
+            break;
+        case mPlayer_SWITCH_TOOL_RIGHT:
+            for (i = 0; i < mPr_POCKETS_SLOT_COUNT; i++) {
+                player_last_switch_slot_idx++;
+                if (player_last_switch_slot_idx >= mPr_POCKETS_SLOT_COUNT) {
+                    player_last_switch_slot_idx = 0;
+                }
+
+                item = Now_Private->inventory.pockets[player_last_switch_slot_idx];
+                if (ITEM_NAME_GET_TYPE(item) == NAME_TYPE_ITEM1 && ITEM_NAME_GET_CAT(item) == ITEM1_CAT_TOOL &&
+                    mPr_GET_ITEM_COND(Now_Private->inventory.item_conditions, player_last_switch_slot_idx) ==
+                        mPr_ITEM_COND_NORMAL) {
+                    if (mPlib_Get_ItemNoToItemKind(item) != -1) {
+                        break;
+                    }
+                }
+            }
+            break;
+    }
+
+    /* Unified logic for left & right tool switching case */
+    if (i != mPr_POCKETS_SLOT_COUNT) {
+        // item holds the tool to switch to
+        mPr_SetPossessionItem(Now_Private, player_last_switch_slot_idx, item, mPr_ITEM_COND_NORMAL);
+        Now_Private->equipment = item;
+    }
+}
+
+static void Player_actor_setup_main_Switch_tool(ACTOR* actorx, GAME* game) {
+    PLAYER_ACTOR* player = (PLAYER_ACTOR*)actorx;
+    int anim1_idx;
+    int part_table_idx;
+    int switch_dir = player->requested_main_index_data.switch_tool.switch_dir;
+
+    Player_actor_SetupItem_Base1(actorx, mPlayer_ANIM_MENU_CATCH1, -6.0f, &anim1_idx, &part_table_idx);
+    Player_actor_InitAnimation_Base2(actorx, game, mPlayer_ANIM_MENU_CATCH1, anim1_idx, 1.0f, 1.0f, 0.5f, -6.0f,
+                                     cKF_FRAMECONTROL_STOP, mPlayer_PART_TABLE_PICK_UP);
+    Player_actor_setup_main_Base(actorx, game);
+
+    if (switch_dir == mPlayer_SWITCH_TOOL_PUTAWAY) {
+        sAdo_SysTrgStart(NA_SE_60);
+    } else {
+        sAdo_SysTrgStart(NA_SE_41C);
+    }
+
+    Player_actor_pick_tool(switch_dir);
+}
+
+static void Player_actor_Movement_Switch_tool(ACTOR* actorx) {
+    chase_angle(&actorx->shape_info.rotation.y, 0, 1000);
+    actorx->world.angle.y = actorx->shape_info.rotation.y;
+    Player_actor_Movement_Base_Stop(actorx, FALSE);
+}
+
+static int Player_actor_CulcAnimation_Switch_tool(ACTOR* actorx, f32* last_anim0_cur_frame_p) {
+    return Player_actor_CulcAnimation_Base2(actorx, last_anim0_cur_frame_p);
+}
+
+static void Player_actor_ObjCheck_Switch_tool(ACTOR* actorx, GAME* game) {
+    Player_actor_Excute_Corect_forStand(actorx, game);
+}
+
+static void Player_actor_BGcheck_Switch_tool(ACTOR* actorx) {
+    Player_actor_BGcheck_common_type1(actorx);
+}
+
+static void Player_actor_SearchAnimation_Switch_tool(ACTOR* actorx, GAME* game, f32 frame) {
+    PLAYER_ACTOR* player = (PLAYER_ACTOR*)actorx;
+
+    if (Player_actor_Check_AnimationFrame_PerfectEquel(actorx, frame) == FALSE) {
+        Player_actor_Set_FootMark_Base1(actorx, game, FALSE, FALSE);
+    }
+}
+
+static void Player_actor_Set_Item_Switch_tool(ACTOR* actorx) {
+    // PLAYER_ACTOR* player = (PLAYER_ACTOR*)actorx;
+    // mPlayer_main_switch_tool_c* main_switch_tool_p = &player->main_data.switch_tool;
+    // f32* scale_p = &main_switch_tool_p->scale;
+    // xyz_t* item_pos_p = &main_switch_tool_p->item_pos;
+    // xyz_t* left_hand_pos_p = &player->left_hand_pos;
+    // f32* timer_p = &main_switch_tool_p->timer;
+
+    // (*timer_p) += 1.0f;
+    // if (*timer_p > 40.0f) {
+    //     *timer_p = 40.0f;
+    //     *scale_p = 0.0f;
+    //     *item_pos_p = *left_hand_pos_p;
+    // } else {
+    //     xyz_t* item_ofs_p = &main_switch_tool_p->item_offset;
+
+    //     if (*timer_p < 20.0f) {
+    //         item_ofs_p->x = item_pos_p->x - left_hand_pos_p->x;
+    //         item_ofs_p->y = item_pos_p->y - left_hand_pos_p->y;
+    //         item_ofs_p->z = item_pos_p->z - left_hand_pos_p->z;
+    //     } else {
+    //         f32 p = 1.0f - (*timer_p - 20.0f) / 20.0f;
+
+    //         if (p < 0.0f) {
+    //             p = 0.0f;
+    //         } else if (p > 1.0f) {
+    //             p = 1.0f;
+    //         }
+
+    //         *scale_p = p * 0.01f;
+    //         item_pos_p->x = left_hand_pos_p->x + p * item_ofs_p->x;
+    //         item_pos_p->y = left_hand_pos_p->y + p * item_ofs_p->y;
+    //         item_pos_p->z = left_hand_pos_p->z + p * item_ofs_p->z;
+    //     }
+    // }
+}
+
+static void Player_actor_request_proc_index_fromSwitch_tool(ACTOR* actorx, GAME* game, int end_flag) {
+    PLAYER_ACTOR* player = (PLAYER_ACTOR*)actorx;
+
+    if (end_flag) {
+        if (Player_actor_GetController_move_percentX() || Player_actor_GetController_move_percentY()) {
+            Player_actor_request_main_walk_all(game, NULL, -5.0f, 0, mPlayer_REQUEST_PRIORITY_1);
+        } else {
+            Player_actor_SettleRequestMainIndexPriority(actorx);
+            Player_actor_request_main_wait_all(game, -5.0f, 0.0f, 0, mPlayer_REQUEST_PRIORITY_1);
+        }
+    }
+}
+
+static void Player_actor_main_Switch_tool(ACTOR* actorx, GAME* game) {
+    f32 last_anim0_cur_frame;
+    int end_flag;
+
+    Player_actor_Movement_Switch_tool(actorx);
+    Player_actor_Reinput_force_position_angle(actorx, game);
+    end_flag = Player_actor_CulcAnimation_Switch_tool(actorx, &last_anim0_cur_frame);
+    Player_actor_SearchAnimation_Switch_tool(actorx, game, last_anim0_cur_frame);
+    Player_actor_Set_Item_Switch_tool(actorx);
+    Player_actor_recover_lean_angle(actorx);
+    Player_actor_set_eye_pattern_normal(actorx);
+    Player_actor_ObjCheck_Switch_tool(actorx, game);
+    Player_actor_BGcheck_Switch_tool(actorx);
+    Player_actor_Item_main(actorx, game);
+    Player_actor_request_proc_index_fromSwitch_tool(actorx, game, end_flag);
+}

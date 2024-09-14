@@ -353,6 +353,9 @@ static int Player_actor_request_main_demo_geton_boat_sitdown_all(GAME* game, int
 static int Player_actor_request_main_demo_geton_boat_wait_all(GAME* game, int prio);
 static int Player_actor_request_main_demo_getoff_boat_all(GAME* game, const xyz_t* pos_p, s16 angle_y, int prio);
 
+static int Player_actor_CheckController_forSwitch_tool(GAME* game);
+static int Player_actor_request_main_switch_tool(GAME* game, int direction);
+
 #ifdef MUST_MATCH
 #ifndef __INTELLISENSE__
 /* Force assetrip to detect these assets. They're used in a .c_inc file. */
@@ -515,6 +518,7 @@ FORCESTRIP static u8 tol_sponge_1_main1_tex_txt_0[] ATTRIBUTE_ALIGN(32) = {
 #include "../src/m_player_main_demo_get_golden_item.c_inc"
 #include "../src/m_player_main_demo_get_golden_item2.c_inc"
 #include "../src/m_player_main_demo_get_golden_axe_wait.c_inc"
+#include "../src/m_player_main_switch_tool.c_inc"
 
 // static void Player_actor_Refuse_pickup_demo_ct(ACTOR*);
 

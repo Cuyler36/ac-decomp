@@ -424,7 +424,7 @@ static void mFM_BlockDataSet2(const mActor_name_t field_name, mFM_block_info_c* 
                               const int name_start) {
     mFM_bg_data_c** block_data;
     mFM_bg_data_c* alloc_bg_data;
-    mFM_combo_info_c* combi;
+    const mFM_combo_info_c* combi;
     mActor_name_t bg_name;
     mActor_name_t fg_name;
     int fg_idx;

@@ -41,6 +41,10 @@ typedef struct player_actor_s PLAYER_ACTOR;
 
 #define mPlayer_NET_CATCH_TABLE_COUNT 8
 
+#define mPlayer_SWITCH_TOOL_LEFT 0
+#define mPlayer_SWITCH_TOOL_RIGHT 1
+#define mPlayer_SWITCH_TOOL_PUTAWAY 2
+
 enum {
     mPlayer_JOINT_ROOT,
     mPlayer_JOINT_BASE,
@@ -219,6 +223,7 @@ enum {
     mPlayer_INDEX_DEMO_GET_GOLDEN_ITEM,
     mPlayer_INDEX_DEMO_GET_GOLDEN_ITEM2,
     mPlayer_INDEX_DEMO_GET_GOLDEN_AXE_WAIT,
+    mPlayer_INDEX_SWITCH_TOOL,
 
     mPlayer_INDEX_NUM
 };
@@ -1297,6 +1302,10 @@ typedef struct {
     ACTOR* speak_actor;
 } mPlayer_request_demo_wait_from_submenu_c;
 
+typedef struct player_request_switch_tool_s {
+    int switch_dir;
+} mPlayer_request_switch_tool_c;
+
 typedef union {
     mPlayer_request_give_from_submenu_c give_from_submenu;
     mPlayer_request_putin_scoop_from_submenu_data_c putin_scoop_from_submenu;
@@ -1377,6 +1386,7 @@ typedef union {
     mPlayer_request_radio_exercise_c radio_exercise;
     mPlayer_request_demo_geton_boat_wade_c demo_geton_boat_wade;
     mPlayer_request_demo_getoff_boat_c demo_getoff_boat;
+    mPlayer_request_switch_tool_c switch_tool;
     u64 align; // TODO: is this necessary? it makes the size correct for this and mPlayer_request_main_data
 } mPlayer_request_backup_u;
 
@@ -1482,6 +1492,7 @@ typedef union {
     mPlayer_request_takeout_item_c takeout_item;
     mPlayer_request_putin_item_c putin_item;
     mPlayer_request_knock_door_c knock_door;
+    mPlayer_request_switch_tool_c switch_tool;
     /* TODO: others? */
     // u8 force_size[72]; // TEMP
 } mPlayer_request_main_data;
